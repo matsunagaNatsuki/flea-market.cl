@@ -32,5 +32,37 @@
     margin-top: 80px;
 }
 
+.position-relative
+{
+    position: relative;
+    overflow: hidden;
+}
+
+.sold-ribbon {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.sold-ribbon span{
+    position: absolute;
+    display: block;
+    width: 120px;
+    padding: 4px 0;
+    background: #b61935;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: capitalize;
+    transform: rotate(-45deg);
+    top: 10px;
+    left: -40px;
+}
+
 
 

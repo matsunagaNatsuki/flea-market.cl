@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Profile;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -56,5 +57,20 @@ class User extends Authenticatable
     public function address()
     {
         return $this->hasOne(Profile::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function likedSells()
+    {
+        return $this->belongsToMany(Sell::class, 'likes')->withTimestamps();
+    }
+
+    public function buys()
+    {
+        return $this->hasMany(Buy::class);
     }
 }

@@ -1,16 +1,169 @@
+/* 全体レイアウト */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+        Arial, "YuGothic", "Yu Gothic", Meiryo, sans-serif;
+    background: #fff;
+    margin-top: 100px;
+}
+
+/* 画面全体の枠と余白（このページ専用CSSなので body をそのまま使います） */
+body {
+    border: 1px solid #d7d7d7;
+    padding: 40px 60px;
+    box-sizing: border-box;
+}
+
+/* 商品画像＋商品名・金額エリア */
+.image-upload {
+    position: absolute;
+    top: 60px;
+    left: 80px;
+    width: 120px;
+    height: 120px;
+    border: 1px solid #d7d7d7;
+    background: #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-top: 120px;
+}
+
+.image-upload img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* 商品名・価格は画像の右側に出したいので左に余白を空ける */
 .purchase-form__group {
-    margin-left: 600px;
-    margin-top: 200px;
+    margin-left: 240px;
+    /* 画像幅＋余白分 */
+    margin-top: 60px;
 }
 
-.price {
-    font-size: 24px;
+.purchase-form__group h1 {
+    font-size: 16px;
+    margin-bottom: 6px;
 }
 
-.image-upload  img{
-    width: 200;
-    height: auto;
-    margin-left: 300px;
-    margin-top: -150px;
+.purchase-form__group .price {
+    font-size: 14px;
 }
 
+/* 左カラム全体（支払い方法・配送先）は、右の小計ボックスと分けるため幅を固定 */
+.purchase,
+.purchase-form__group {
+    max-width: 420px;
+}
+
+/* 支払い方法（左側の見出し＋プルダウンっぽく見せるライン） */
+.subtotal {
+    /* 右側の小計ボックス用にも使うので、ここでは右寄せ指定だけ */
+}
+
+/* --- 右側：小計ボックス --- */
+
+.subtotal {
+    width: 260px;
+    border: 1px solid #d7d7d7;
+    padding: 0;
+    margin-left: auto;
+    /* 右に寄せる */
+    margin-top: -120px;
+    background: #fff;
+    font-size: 12px;
+}
+
+
+/* 小計のタイトルは非表示（画像と同じような見た目にするため） */
+.subtotal h3 {
+    display: none;
+}
+
+/* 小計ボックス内の行（商品代金行と支払い方法行） */
+.subtotal p {
+    margin: 0;
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #d7d7d7;
+}
+
+.subtotal p:first-of-type {
+    border-top: none;
+}
+
+/* 支払い方法のプルダウン */
+.subtotal select {
+    font-size: 12px;
+    padding: 4px 6px;
+}
+
+/* 購入ボタン（右側の赤いボタン） */
+.btn {
+    width: 260px;
+    margin-left: auto;
+    /* 右に寄せる */
+    margin-top: 30px;
+}
+
+.btn button {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    background: #ff5f5f;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn button:hover {
+    opacity: 0.9;
+}
+
+/* --- 左側：支払い方法の見出しライン・配送先 --- */
+
+/* 支払い方法 見出し用の横線 */
+#payment_method {
+    margin-top: 40px;
+}
+
+/* 支払い方法ラベルの上に太めの区切り線を引きたい場合は purchase の上に線を引く */
+.purchase {
+    margin-top: 80px;
+    padding-top: 25px;
+    border-top: 1px solid #d7d7d7;
+    border-bottom: 1px solid #d7d7d7;
+    padding-bottom: 25px;
+    max-width: 420px;
+}
+
+/* 配送先ラベル */
+.purchase label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+/* 郵便番号・住所など */
+.purchase p {
+    font-size: 12px;
+    margin: 4px 0;
+}
+
+/* 「変更する」リンクを配送先行の右端に置くイメージ */
+.purchase+a {
+    display: inline-block;
+    font-size: 11px;
+    color: #1a7ecf;
+    text-decoration: none;
+    margin-top: -40px;
+    margin-left: 320px;
+}
+
+.purchase+a:hover {
+    text-decoration: underline;
+}

@@ -15,7 +15,13 @@
                     <div class="col-md-2 mb-4">
                         <a href="{{ url('/item/' . $sell->id) }}" >
                             <div class="card">
-                                <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
+                                <div class="position-relative">
+                                    @if ($sell->sold())
+                                    <div class="sold-ribbon"><span>SOLD</span></div>
+                                    @endif
+                                    <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
+                                </div>
+
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $sell->name }}</h5>
                                 </div>

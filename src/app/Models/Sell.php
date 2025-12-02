@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Like;
 
 class Sell extends Model
 {
@@ -30,5 +31,36 @@ class Sell extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function sold()
+    {
+        return Buy::where('sell_id', $this->id)->exists();
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function liked(): bool
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return false;
+        }
+
+        return $this->likes()->where('user_id', $userId)->exists();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'sell_id')->latest();
+    }
+
+    public function getComments()
+    {
+        $comments = Comment::where('sell_id', $this->id)->get();
+        return $comments;
     }
 }

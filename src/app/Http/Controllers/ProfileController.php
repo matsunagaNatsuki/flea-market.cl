@@ -5,15 +5,32 @@ namespace App\Http\Controllers;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Buy;
+use App\Models\Sell;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    public function mypage()
+    public function mypage(Request $request)
     {
-        $profile = Profile::where('user_id', Auth::id())->first();
-        return view('profile', compact('profile'));
+        $user = Auth::user();
+        $profile = Profile::where('user_id', $user->id)->first();
+        $page = $request->query('page', 'sell');
+        if ($page === 'buy'){
+            $items = Buy::with('sell')
+                ->where('user_id', $user->id)
+                ->latest()
+                ->get();
+        } else {
+            $page = 'sell';
+
+            $items = Sell::where('user_id', $user)
+                ->latest()
+                ->get();
+        }
+
+        return view('profile', compact('profile', 'user', 'items', 'page'));
     }
 
     public function showProfile()

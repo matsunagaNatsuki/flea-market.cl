@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Profile;
 use App\Models\Sell;
+use App\Models\Buy;
 use App\Models\Condition;
 use App\Models\Category;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ExhibitionRequest;
+use App\Http\Requests\PurchaseRequest;
+use App\Http\Requests\CommentRequest;
+use Stripe\StripeClient;
+use Illuminate\Support\Facades\Auth;
 
 class SellController extends Controller
 {
@@ -23,15 +31,13 @@ class SellController extends Controller
 
         $sells = $sells->get();
 
-
         return view('index', compact('sells', 'search'));
     }
 
     public function item($sell_id) {
-    $sell = Sell::find($sell_id);
-    $sell = Sell::with(['category', 'condition'])->findOrFail($sell_id);
+        $sell = Sell::with(['user.profile','category', 'condition','comments.user.profile',])->findOrFail($sell_id);
 
-    return view('item', compact('sell'));
+        return view('item', compact('sell'));
     }
 
     public function sell(Request $request){
@@ -70,34 +76,137 @@ class SellController extends Controller
     }
 
     public function purchase($item_id) {
-    $sell = Sell::find($item_id);
-    $user = auth()->user()->load('profile');
+        $sell = Sell::with('user.profile')->findOrFail($item_id);
+        $user = User::with('profile')->findOrFail(Auth::id());
 
-    if(!$sell) {
-        abort(404);
+        return view('purchase', compact('sell','user'));
     }
 
-    return view('purchase', compact('sell','user'));
+    public function buy(PurchaseRequest $request, $item_id) {
+        $item = Sell::findOrFail($item_id);
+        $stripe = new StripeClient(config('stripe.secret_key'));
+
+        [
+            $user_id,
+            $sell_id,
+            $buy_postal_code,
+            $buy_address,
+            $buy_building
+        ] = [
+            Auth::id(),
+            $item->id,
+            $request->buy_postal_code,
+            urlencode($request->buy_address),
+            $request->buy_building ? urlencode($request->buy_building) : null,
+        ];
+
+        $checkout_session = $stripe->checkout->sessions->create([
+            'payment_method_types' => [$request->payment_method],
+            'payment_method_options' => [
+                'konbini' => [
+                    'expires_after_days' => 7,
+                ],
+            ],
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'currency' => 'jpy',
+                        'product_data' => ['name' => $item->name],
+                        'unit_amount' => $item->price,
+                    ],
+                    'quantity' => 1,
+                ],
+            ],
+            'mode' => 'payment',
+            'success_url' => "http://localhost/purchase/{$item_id}/success"
+                . "?user_id={$user_id}"
+                . "&sell_id={$sell_id}"
+                . "&buy_postal_code={$buy_postal_code}"
+                . "&buy_address={$buy_address}"
+                . "&buy_building={$buy_building}",
+        ]);
+
+        return redirect($checkout_session->url);
     }
 
-    public function buy(Request $request) {
-        $paymentMethod =$request->input('payment_method');
-        session()->put('payment_method', $paymentMethod);
+    public function success($item_id, Request $request){
+        $user_id          = $request->query('user_id');
+        $sell_id           = $request->query('sell_id');
+        $buy_postal_code = $request->query('buy_postal_code');
+        $buy_address  = $request->query('buy_address');
+        $buy_building = $request->query('buy_building');
 
-        return back();
+        if (is_null($user_id) || is_null($sell_id) || is_null($buy_postal_code) || is_null($buy_address)) {
+            return redirect('/')
+                ->with('flashError', '決済後の情報取得に失敗しました。申し訳ありませんが、もう一度やり直してください。');
+        }
+
+        $buy_address = urldecode($buy_address);
+        $buy_building = $buy_building ? urldecode($buy_building) : null;
+
+        Buy::create([
+            'user_id' => $user_id,
+            'sell_id' => $item_id,
+            'buy_postal_code' => $buy_postal_code,
+            'buy_address' => $buy_address,
+            'buy_building' => $buy_building ?? null,
+        ]);
+
+        return redirect('/')->with('flashSuccess', '決済が完了しました！');
     }
 
     public function address($item_id)
     {
-        $sell = Sell::find($item_id);
+        $sell = Sell::findOrFail($item_id);
+        $user = User::with('profile')->findOrFail(Auth::id());
 
-        if (!$sell) {
-            abort(404);
-        }
-
-        return view('address', compact('sell'));
+        return view('address', compact('sell', 'user'));
     }
 
+    public function UpdateAddress(Request $request, $item_id)
+    {
+        $user = User::find(Auth::id());
+        Profile::where('user_id', $user->id)->update([
+            'postal_code' => $request->postal_code,
+            'address' => $request->address,
+            'building' => $request->building
+        ]);
 
+        return redirect("/purchase/{$item_id}");
+    }
 
+    public function like(Request $request, $item_id)
+    {
+        $user = $request->user();
+        $sell = Sell::findOrFail($item_id);
+
+        $existingLike = $sell->likes()
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($existingLike) {
+            $existingLike->delete();
+        } else {
+            $sell->likes()->create([
+                'user_id' => $user->id,
+            ]);
+        }
+
+        return back();
+    }
+
+    public function comment(CommentRequest $request, $item_id)
+    {
+        // $sell = Sell::with(['user.profile', 'category', 'condition', 'comments.user.profile',])->findOrFail($item_id);
+        $validated = $request->validated();
+
+        Comment::create([
+            'user_id' => $request->user()->id,
+            'sell_id' => $item_id,
+            'content' => $validated['content'],
+        ]);
+
+        // return view('item', compact('sell'));
+        return redirect('item/' . $item_id);
+    }
 }

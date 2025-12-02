@@ -2,10 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Sell;
+
 
 class Comment extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'sell_id',
+        'content',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function sell()
+    {
+        return $this->belongsTo(Sell::class, 'sell_id');
+    }
 }

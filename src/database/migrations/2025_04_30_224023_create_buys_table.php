@@ -19,7 +19,7 @@ class CreateBuysTable extends Migration
             $table->unsignedBigInteger('sell_id')->nullable(false);
             $table->string('buy_postal_code', 8)->nullable(false);
             $table->string('buy_address', 255)->nullable(false);
-            $table->string('buy_building', 255);
+            $table->string('buy_building', 255)->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
