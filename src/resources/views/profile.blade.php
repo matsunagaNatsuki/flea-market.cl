@@ -4,15 +4,55 @@
 <link rel="stylesheet" href="{{ asset('css/auth/profile.css') }}">
 @endsection
 
-<div class="btn">
-<a href="mypage/profile">プロフィールを編集</a>
-</div>
-
-<div class="silver-line"></div>
-
-<div class="profile-container">
-    <div class="profile-image">
-        <img src="{{ asset($profile->image ? 'storage/' . $profile->image : 'images/—Pngtree—cat default avatar_5416936.png') }}" alt="{{ $profile->name }}">
+@section('content')
+<div class="container">
+    <div class="profile-container">
+        <div class="profile-image">
+            <img src="{{ asset($profile->image ? 'storage/' . $profile->image : 'null') }}" alt="{{ $profile->name }}">
+        </div>
+        <h2 class="profile-name">{{ $profile->name }}</h2>
+        <div class="btn">
+            <a href="mypage/profile">プロフィールを編集</a>
+        </div>
     </div>
-    <h2 class="profile-name">{{ $profile->name }}</h2>
-</div>
+
+    <div class="tab__list">
+        <li class="sell__item"><a href="/mypage?page=sell">出品した商品</a></li>
+        <li class="buy__item"><a href="/mypage?page=buy">購入した商品</a></li>
+    </div>
+    <div class="silver-line">
+
+        {{-- 出品タブ --}}
+        @if ($page === 'sell')
+        @forelse ($items as $sell)
+        <div class="item">
+            <a href="/item/{{ $sell->id }}">
+                <div class="item__img--container">
+                    <img src="{{ Storage::url($sell->image) }}" class="item__img" alt="商品画像">
+                </div>
+                <p class="item__name">{{ $sell->name }}</p>
+            </a>
+        </div>
+        @empty
+        <p>出品した商品はありません。</p>
+        @endforelse
+        @endif
+
+
+        {{-- 購入タブ --}}
+        @if ($page === 'buy')
+        @forelse ($items as $buy)
+        <div class="item">
+            <a href="/item/{{ $buy->sell->id }}">
+                <div class="item__img--container">
+                    <img src="{{ $buy->sell->image }}" class="item__img" alt="商品画像">
+                </div>
+                <p class="item__name">{{ $buy->sell->name }}</p>
+            </a>
+        </div>
+        @empty
+        <p>購入した商品はありません。</p>
+        @endforelse
+        @endif
+    </div>
+    @endsection

@@ -25,7 +25,7 @@ class ProfileController extends Controller
         } else {
             $page = 'sell';
 
-            $items = Sell::where('user_id', $user)
+            $items = Sell::where('user_id', $user->id)
                 ->latest()
                 ->get();
         }

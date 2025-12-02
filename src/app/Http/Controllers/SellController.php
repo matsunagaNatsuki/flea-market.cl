@@ -53,8 +53,8 @@ class SellController extends Controller
 
         if ($image) {
             $fileName = 'profile_' . uniqid() . '.' . $image->extension();
-            $path = $image->storeAs('public/profiles', $fileName);
-            $imagePath = Storage::url($path);
+            $path = $image->storeAs('profiles', $fileName, 'public');
+            $imagePath = $path;
         } else {
             $imagePath = null;
         }

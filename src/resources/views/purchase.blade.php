@@ -5,25 +5,21 @@
 @endsection
 
 @section('content')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<div class="purchase-form__group">
-    <h1>{{ $sell->name }}</h1>
-    <p class="price">￥{{ $sell->price }}</p>
-</div>
+
 
 <div class="image-upload">
     <img src="{{ $sell->image }}" alt="{{ $sell->name }}">
 </div>
-<div id="pay_confirm"></div>
 <form action=" {{ route('purchase.buy', ['item_id' => $sell->id]) }}" method="post">
-    @csrf
-    @php
-    $selectedPaymentMethod = session('payment_method', '');
-    @endphp
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <div class="purchase-form__group">
+        <h1>{{ $sell->name }}</h1>
+        <p class="price">￥{{ $sell->price }}</p>
 
-    <div class="subtotal">
-        <h3>小計</h3>
-        <p>商品代金: ￥{{ $sell->price }}</p>
+        @php
+        $selectedPaymentMethod = session('payment_method', '');
+        @endphp
+
         <p>支払い方法:
             <select name="payment_method" id="payment_method">
                 <option value="" {{ $selectedPaymentMethod == '' ? 'selected' : ''}}>選択してください</option>
@@ -31,6 +27,14 @@
                 <option value="card" {{ session('payment_method') == 'credit_card' ? 'selected' : ''}}>カード払い</option>
             </select>
         </p>
+    </div>
+    @csrf
+
+
+    <div class="subtotal">
+        <h3>小計</h3>
+        <p>商品代金: ￥{{ $sell->price }}</p>
+        <div id="pay_confirm">支払い方法</div>
     </div>
 
     <div class="btn">
@@ -55,5 +59,5 @@
         <input type="hidden" name="buy_building" value="{{ $user->profile->building }}">
     </div>
     <a href="/purchase/address/{{ $sell->id }}">変更する</a>
-    </form>
-    <script src="{{ asset('js/purchase.js') }}"></script>
+</form>
+<script src="{{ asset('js/purchase.js') }}"></script>
