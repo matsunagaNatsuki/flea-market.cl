@@ -9,14 +9,12 @@
     <div class="item-detail__inner">
 
         <div class="item-detail__image-area">
-            @if ($sell->sold())
-            <div class="item__img sold">
-                <img src="{{ $sell->image }}" alt="{{ $sell->name }}">
-            </div>
+            @if (Str::startsWith($sell->image, ['http://', 'https://']))
+            {{-- S3 などフルURLで保存されている場合 --}}
+            <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
             @else
-            <div class="item__img">
-                <img src="{{ $sell->image }}" alt="{{ $sell->name }}">
-            </div>
+            {{-- storageに相対パス（profiles/... など）で保存されている場合 --}}
+            <img src="{{ Storage::url($sell->image) }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
             @endif
         </div>
 
@@ -79,8 +77,8 @@
                         <div class="comment__user">
                             <div class="user__img">
                                 @php
-                                    $user = $comment->user ?? null;
-                                    $profile = $user ? $user->profile ?? null : null;
+                                $user = $comment->user ?? null;
+                                $profile = $user ? $user->profile ?? null : null;
                                 @endphp
 
                                 <img src="{{ \Storage::url($profile->image) }}" alt="">

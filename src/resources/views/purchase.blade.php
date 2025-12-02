@@ -8,7 +8,11 @@
 
 
 <div class="image-upload">
-    <img src="{{ $sell->image }}" alt="{{ $sell->name }}">
+    @if (Str::startsWith($sell->image, ['http://', 'https://']))
+        <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
+    @else
+        <img src="{{ Storage::url($sell->image) }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
+    @endif
 </div>
 <form action=" {{ route('purchase.buy', ['item_id' => $sell->id]) }}" method="post">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
