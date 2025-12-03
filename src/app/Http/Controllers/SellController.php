@@ -23,7 +23,6 @@ class SellController extends Controller
     {
         $tab = $request->input('tab', 'recommend');
         $search = $request->query('search');
-        // $sells = Sell::query();
         $sells = Sell::where('user_id', '!=', auth()->id());
 
         if ($tab === 'mylist' && auth()->check()) {
@@ -35,7 +34,7 @@ class SellController extends Controller
         }
 
         if ($search) {
-            $sells->where('name', 'LIKE', "{$search}%");
+            $sells->where('name', 'LIKE', "%{$search}%");
         }
 
         $sells = $sells->get();
