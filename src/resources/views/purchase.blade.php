@@ -5,8 +5,6 @@
 @endsection
 
 @section('content')
-
-
 <div class="image-upload">
     @if (Str::startsWith($sell->image, ['http://', 'https://']))
         <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">

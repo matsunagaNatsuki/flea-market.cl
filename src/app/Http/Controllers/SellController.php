@@ -21,17 +21,26 @@ class SellController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $sells = Sell::query();
+        $tab = $request->input('tab', 'recommend');
+        $search = $request->query('search');
+        // $sells = Sell::query();
         $sells = Sell::where('user_id', '!=', auth()->id());
 
+        if ($tab === 'mylist' && auth()->check()) {
+            $sells->whereIn('id', function ($sells) {
+                $sells->select('sell_id')
+                    ->from('likes')
+                    ->where('user_id', auth()->id());
+            });
+        }
+
         if ($search) {
-            $sells=$sells->where('name', 'LIKE', "{$search}%");
+            $sells->where('name', 'LIKE', "{$search}%");
         }
 
         $sells = $sells->get();
 
-        return view('index', compact('sells', 'search'));
+        return view('index', compact('sells', 'search','tab'));
     }
 
     public function item($sell_id) {

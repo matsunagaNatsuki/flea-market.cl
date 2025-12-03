@@ -5,8 +5,7 @@ use App\Http\Controllers\SellController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
 
-Route::get('/',[SellController::class, 'index']);
-Route::post('/', [SellController::class,'index']);
+Route::get('/',[SellController::class, 'index'])->name('items.list');
 Route::get('/?tab=myList', [SellController::class, 'myList']);
 Route::get('/item/{item_id}', [SellController::class, 'item']);
 Route::get('/purchase/{item_id}', [SellController::class,'purchase'])->name('purchase.show');
