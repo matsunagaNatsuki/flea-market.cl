@@ -9,6 +9,7 @@ use App\Models\Buy;
 use App\Models\Sell;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ProfileRequest;
 
 class ProfileController extends Controller
 {
@@ -40,7 +41,7 @@ class ProfileController extends Controller
         return view('profile_edit');
     }
 
-    public function editProfile(Request $request)
+    public function editProfile(profileRequest $request)
     {
         $profile = Profile::where('user_id', Auth::id())->first();
 

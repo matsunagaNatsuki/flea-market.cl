@@ -30,4 +30,15 @@ class AddressRequest extends FormRequest
             'building' => 'nullable|string|max:255',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'postal_code.required' => '郵便番号を入力してください',
+            'postal_code.regex' => 'ハイフンありの8文字で入力してください',
+            'address.required' => '住所を入力してください',
+            'address.max' => '住所は255文字まで入力できます',
+            'building.max' => '建物名は255文字まで入力できます',
+        ];
+    }
 }

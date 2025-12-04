@@ -173,3 +173,7 @@ body {
 .purchase+a:hover {
     text-decoration: underline;
 }
+
+.alert-danger {
+    color: red;
+}

@@ -16,6 +16,7 @@ use App\Http\Requests\PurchaseRequest;
 use App\Http\Requests\CommentRequest;
 use Stripe\StripeClient;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AddressRequest;
 
 class SellController extends Controller
 {
@@ -171,7 +172,7 @@ class SellController extends Controller
         return view('address', compact('sell', 'user'));
     }
 
-    public function UpdateAddress(Request $request, $item_id)
+    public function UpdateAddress(AddressRequest $request, $item_id)
     {
         $user = User::find(Auth::id());
         Profile::where('user_id', $user->id)->update([

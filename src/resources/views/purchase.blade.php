@@ -7,9 +7,9 @@
 @section('content')
 <div class="image-upload">
     @if (Str::startsWith($sell->image, ['http://', 'https://']))
-        <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
+    <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
     @else
-        <img src="{{ Storage::url($sell->image) }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
+    <img src="{{ Storage::url($sell->image) }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
     @endif
 </div>
 <form action=" {{ route('purchase.buy', ['item_id' => $sell->id]) }}" method="post">
@@ -29,6 +29,13 @@
                 <option value="card" {{ session('payment_method') == 'credit_card' ? 'selected' : ''}}>カード払い</option>
             </select>
         </p>
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+            @endforeach
+        </div>
+        @endif
     </div>
     @csrf
 
