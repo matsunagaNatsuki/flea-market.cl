@@ -61,12 +61,4 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-    public function __invoke()
-    {
-        $user = auth()->user();
-
-        if (!$user->hasVerifiedEmail()) {
-            return redirect()->route('verification.notice'); // /email/verify
-        }
-    }
 }
