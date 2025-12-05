@@ -1,63 +1,139 @@
-/* 全体のフォームコンテナ */
-.profile-form {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 30px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+        Arial, "YuGothic", "Yu Gothic", Meiryo, sans-serif;
+    background: #fff;
+    padding-top: 60px; 
 }
 
-/* ヘッダー */
+/* 全体ラッパー */
+.profile-form {
+    max-width: 720px;
+    margin: 40px auto 80px;
+}
+
+/* 見出し */
 .profile-form__heading {
     text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-/* フォーム内のラベル */
-.profile-form__label {
-    display: block;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-/* 入力フィールド */
-.profile-form__input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    outline: none;
-}
-
-/* フォーカス時のスタイル */
-.profile-form__input:focus {
-    border-color: #007bff;
-}
-
-
-
-/* 送信ボタン */
-.a {
-    width: 100%;
-    padding: 10px;
     font-size: 30px;
-    background-color:red;
-    border: none;
-    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 32px;
+}
+
+/* 内側ボックス */
+.profile-form__inner {
+    width: 100%;
+}
+
+/* 画像＋ボタン部分 */
+.profile-form_image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 48px;
+    font-weight: bold;
+}
+
+/* プロフィール画像（丸いグレーの円） */
+#profile_preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: lightgray;
+    display: block;
+}
+
+/* input[type=file] は隠してラベルをボタン風に */
+.profile-form__image {
+    display: none;
+}
+
+.profile-form__label[for="profile_image"] {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 24px;
+    border: 1px solid red;
+    color: red;
+    font-size: 14px;
+    background: #fff;
     cursor: pointer;
+    transition: background 0.2s, color 0.2s;
 }
 
-.profile-form__btn:hover {
-    background-color: red;
+.profile-form__label[for="profile_image"]:hover {
+    background: red;
+    color: #fff;
 }
 
-/* レスポンシブ対応 */
-@media screen and (max-width: 600px) {
+/* 各入力グループ */
+.profile-form__group {
+    width: 100%;
+    margin: 0 auto 28px;
+}
+
+/* ラベル（ユーザー名・住所など） */
+.profile-form__group .profile-form__label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+/* テキスト入力共通 */
+.profile-form__name,
+.profile-form__postal_code,
+.profile-form___address,
+.profile-form__build {
+    width: 100%;
+    padding: 12px 10px;
+    border-radius: 4px;
+    border: 1px solid black;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+
+
+/* 更新ボタン */
+.btn {
+    margin-top: 32px;
+}
+
+.btn button {
+    width: 100%;
+    padding: 14px 0;
+    border: none;
+    border-radius: 4px;
+    background: red;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn button:hover {
+    opacity: 0.9;
+}
+
+/* エラーメッセージ */
+.alert-danger {
+    margin-top: 25px;
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* スマホ用調整 */
+@media (max-width: 600px) {
     .profile-form {
-        width: 90%;
-        padding: 20px;
+        padding: 0 16px;
+    }
+
+    .profile-form_image {
+        flex-direction: column;
+        gap: 16px;
     }
 }
