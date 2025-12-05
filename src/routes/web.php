@@ -9,7 +9,7 @@ Route::get('/',[SellController::class, 'index'])->name('items.list');
 Route::get('/?tab=myList', [SellController::class, 'myList']);
 Route::get('/item/{item_id}', [SellController::class, 'item']);
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/purchase/{item_id}', [SellController::class,'purchase'])->name('purchase.show');
     Route::post('/purchase/{item_id}', [SellController::class, 'buy'])->name('purchase.buy');
     Route::get('/purchase/{item_id}/success', [SellController::class, 'success'])->name('purchase.success');
