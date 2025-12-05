@@ -85,7 +85,7 @@ class SellController extends Controller
     }
 
     public function purchase($item_id) {
-        $sell = Sell::with('user.profile')->findOrFail($item_id);
+        $sell = Sell::with('user')->findOrFail($item_id);
         $user = User::with('profile')->findOrFail(Auth::id());
 
         return view('purchase', compact('sell','user'));
