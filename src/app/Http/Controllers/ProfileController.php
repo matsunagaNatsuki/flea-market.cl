@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Buy;
 use App\Models\Sell;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProfileRequest;
 
 class ProfileController extends Controller
@@ -45,24 +43,27 @@ class ProfileController extends Controller
     {
         $profile = Profile::where('user_id', Auth::id())->first();
 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('profiles', 'public');
+        }
+
         if($profile) {
             $profile->update([
                 'name' => $request->name,
                 'postal_code' => $request->postal_code,
                 'address' => $request->address,
                 'building' => $request->building ?? null,
-                'image' => $request->hasFile('image') ? $request->file('image')->store('profiles', 'public') : ($profile->image ?? 'default-avatar.png'),
+                'image' => $imagePath ?? $profile->image,
             ]);
-        }
-
-        else {
+        }else {
             Profile::create([
                 'user_id' => Auth::id(),
                 'name' => $request->name,
                 'postal_code' => $request->postal_code,
                 'address' => $request->address,
                 'building' => $request->building ?? null,
-                'image' => $request->hasFile('image') ? $request->file('image')->store('profiles', 'public') : '—Pngtree—cat default avatar_5416936.png',
+                'image' => $imagePath,
             ]);
         }
 

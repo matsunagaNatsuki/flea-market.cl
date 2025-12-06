@@ -14,7 +14,7 @@
                 <label class="profile-form__label" for="profile_image">画像を選択する</label>
                 <input class="profile-form__image" type="file" name="image" id="profile_image">
                 <img id="profile_preview"
-                    src="{{ optional($profile)->image ? asset('storage/' . optional($profile)->image) : asset('images/default_profile.png') }}"
+                    src="{{ optional($profile)->image ? asset('storage/' . optional($profile)->image) : asset('images/cat_default_avatar.png') }}"
                     alt="{{ optional($profile)->name }}">
             </div>
 

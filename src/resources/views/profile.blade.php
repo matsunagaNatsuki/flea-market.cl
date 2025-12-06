@@ -8,7 +8,9 @@
 <div class="container">
     <div class="profile-container">
         <div class="profile-image">
-            <img src="{{ asset($profile->image ? 'storage/' . $profile->image : 'null') }}" alt="{{ $profile->name }}">
+            <img id="profile_preview"
+                src="{{ optional($profile)->image ? asset('storage/' . optional($profile)->image) : asset('images/cat_default_avatar.png') }}"
+                alt="{{ optional($profile)->name }}">
         </div>
         <h2 class="profile-name">{{ $profile->name }}</h2>
         <div class="btn">
@@ -24,7 +26,7 @@
 
         {{-- 出品タブ --}}
         @if ($page === 'sell')
-        @forelse ($items as $sell)
+        @foreach ($items as $sell)
         <div class="item">
             <a href="/item/{{ $sell->id }}">
                 <div class="item__img--container">
@@ -33,15 +35,13 @@
                 <p class="item__name">{{ $sell->name }}</p>
             </a>
         </div>
-        @empty
-        <p>出品した商品はありません。</p>
-        @endforelse
+        @endforeach
         @endif
 
 
         {{-- 購入タブ --}}
         @if ($page === 'buy')
-        @forelse ($items as $buy)
+        @foreach ($items as $buy)
         <div class="item">
             <a href="/item/{{ $buy->sell->id }}">
                 <div class="item__img--container">
@@ -50,9 +50,7 @@
                 <p class="item__name">{{ $buy->sell->name }}</p>
             </a>
         </div>
-        @empty
-        <p>購入した商品はありません。</p>
-        @endforelse
+        @endforeach
         @endif
     </div>
     @endsection

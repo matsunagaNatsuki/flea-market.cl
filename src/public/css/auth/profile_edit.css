@@ -40,7 +40,8 @@ body {
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    background-color: lightgray;
+    background-color: white;
+    border: 1px solid lightgrey;
     display: block;
 }
 
