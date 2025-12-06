@@ -78,10 +78,13 @@
                             <div class="user__img">
                                 @php
                                 $user = $comment->user ?? null;
-                                $profile = $user ? $user->profile ?? null : null;
+                                $profile = $user ? ($user->profile ?? null) : null;
+                                $imagePath = $profile && $profile->image
+                                    ? Storage::url($profile->image)
+                                    : asset('images/cat_default_avatar.png');
                                 @endphp
 
-                                <img src="{{ \Storage::url($profile->image) }}" alt="">
+                                <img src="{{ $imagePath }}" alt="ユーザー画像">
                             </div>
                             <p class="user_name">{{$comment->user->name}}</p>
                         </div>

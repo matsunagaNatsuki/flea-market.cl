@@ -12,7 +12,7 @@
                 src="{{ optional($profile)->image ? asset('storage/' . optional($profile)->image) : asset('images/cat_default_avatar.png') }}"
                 alt="{{ optional($profile)->name }}">
         </div>
-        <h2 class="profile-name">{{ $profile->name }}</h2>
+        <h2 class="profile-name">{{ optional($profile)->name }}</h2>
         <div class="btn">
             <a href="mypage/profile">プロフィールを編集</a>
         </div>

@@ -55,7 +55,7 @@
 
             <div class="profile-form__group">
                 <label class="profile-form__label" for="building">建物名</label>
-                <input class="profile-form__build" type="text" name="building" id="building" value="{{ old('building', optional($profile)->build) }}">
+                <input class="profile-form__build" type="text" name="building" id="building" value="{{ old('building', optional($profile)->building) }}">
             </div>
 
             <div class="btn">

@@ -28,3 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('/login', [LoginController::class, 'store']);
+
+Route::get('/email/verify', function () {
+    return view('auth.verify');
+})->name('verification.notice');

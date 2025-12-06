@@ -206,7 +206,6 @@ class SellController extends Controller
 
     public function comment(CommentRequest $request, $item_id)
     {
-        // $sell = Sell::with(['user.profile', 'category', 'condition', 'comments.user.profile',])->findOrFail($item_id);
         $validated = $request->validated();
 
         Comment::create([
@@ -215,7 +214,6 @@ class SellController extends Controller
             'content' => $validated['content'],
         ]);
 
-        // return view('item', compact('sell'));
         return redirect('item/' . $item_id);
     }
 }
