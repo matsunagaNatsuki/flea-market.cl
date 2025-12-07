@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use App\Http\Requests\LoginRequest;
 use Laravel\Fortify\Contracts\LogoutResponse;
 use App\Http\controllers\LoginController;
+use Laravel\Fortify\Http\Requests\LoginRequest;
 
 
 class FortifyServiceProvider extends ServiceProvider
@@ -52,7 +52,6 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
 
-        Fortify::redirects('register', '/mypage/profile');
         Fortify::redirects('login', '/');
 
 

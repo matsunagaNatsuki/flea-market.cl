@@ -4,12 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/',[SellController::class, 'index'])->name('items.list');
-Route::get('/?tab=myList', [SellController::class, 'myList']);
 Route::get('/item/{item_id}', [SellController::class, 'item']);
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified',])->group(function () {
+    Route::get('/?tab=myList', [SellController::class, 'myList']);
     Route::get('/purchase/{item_id}', [SellController::class,'purchase'])->name('purchase.show');
     Route::post('/purchase/{item_id}', [SellController::class, 'buy'])->name('purchase.buy');
     Route::get('/purchase/{item_id}/success', [SellController::class, 'success'])->name('purchase.success');
@@ -29,6 +31,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::post('/login', [LoginController::class, 'store']);
 
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('email');
+
 Route::get('/email/verify', function () {
     return view('auth.verify');
 })->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request){
+    $request->fulfill();
+    return redirect('/mypage/profile');
+})->middleware(['auth', 'signed'])->name('verification.verify');
