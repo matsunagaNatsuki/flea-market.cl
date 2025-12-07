@@ -143,5 +143,9 @@ select {
     border-radius: 5px;
 }
 
+.alert-danger {
+    color: red;
+}
+
 
 

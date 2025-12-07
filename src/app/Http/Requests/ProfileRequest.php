@@ -36,6 +36,7 @@ class ProfileRequest extends FormRequest
     {
         return [
             'name.required' => 'お名前を入力してください',
+            'name.max' => 'お名前は255文字以内で入力してください',
             'image.mimes'=> '商品画像はJPEGまたはPNG形式でアップロードしてください',
             'postal_code.required' => '郵便番号を入力してください',
             'postal_code.regex' => 'ハイフンありの8文字で入力してください',

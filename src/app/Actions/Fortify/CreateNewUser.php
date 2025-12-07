@@ -13,15 +13,19 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required', 'min:8']
         ], [
             'name.required' => 'お名前を入力してください',
+            'name.max' => '255文字以内で入力してください',
             'email.required' => 'メールアドレスを入力してください',
             'email.email' => 'メールアドレスは「ユーザー名@ドメイン」形式で入力してください',
             'password.required' => 'パスワードを入力してください',
             'password.min' => 'パスワードは８文字以上で入力してください',
             'password.confirmed' => 'パスワードと一致しません',
+            'password_confirmation.required' => '確認用パスワードを入力してください',
+            'password_confirmation.min' => '確認用パスワードは8文字以上で入力してください',
         ])->validate();
 
         return User::create([

@@ -49,7 +49,7 @@ body {
 }
 
 
-.register-form__error-message {
+.error-message {
     color: red;
     font-size: 14px;
 }
