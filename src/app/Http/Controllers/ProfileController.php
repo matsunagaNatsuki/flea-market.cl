@@ -39,7 +39,7 @@ class ProfileController extends Controller
         return view('profile_edit', compact('profile'));
     }
 
-    public function editProfile(profileRequest $request)
+    public function editProfile(ProfileRequest $request)
     {
         $profile = Profile::where('user_id', Auth::id())->first();
 

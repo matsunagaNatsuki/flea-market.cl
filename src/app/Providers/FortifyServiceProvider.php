@@ -3,22 +3,15 @@
 namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
-use App\Actions\Fortify\ResetUserPassword;
-use App\Actions\Fortify\UpdateUserPassword;
-use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Contracts\LogoutResponse;
-use App\Http\controllers\LoginController;
 use Laravel\Fortify\Http\Requests\LoginRequest;
 
 
@@ -50,10 +43,9 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::loginView(function () {
             return view('auth.login');
+
+            Fortify::redirects('login', '/');
         });
-
-        Fortify::redirects('login', '/');
-
 
         RateLimiter::for('login', function (Request $request) {
             $email =$request->input(Fortify::username());
@@ -69,10 +61,8 @@ class FortifyServiceProvider extends ServiceProvider
                 $request->session()->regenerateToken();
 
                 return redirect()->route('login');
-
             }
         });
-
 
         Fortify::authenticateUsing(function (LoginRequest $request) {
             $loginRequest = LoginRequest::createFrom($request);
