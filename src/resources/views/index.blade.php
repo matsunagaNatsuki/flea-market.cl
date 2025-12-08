@@ -26,12 +26,12 @@
                 <div class="card">
                     <div class="position-relative">
                         @if ($sell->sold())
-                        <div class="sold-ribbon"><span>SOLD</span></div>
+                            <div class="sold-ribbon"><span>SOLD</span></div>
                         @endif
                         @if (Str::startsWith($sell->image, ['http://', 'https://']))
-                        <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
+                            <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
                         @else
-                        <img src="{{ Storage::url($sell->image) }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
+                            <img src="{{ Storage::url($sell->image) }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
                         @endif
                     </div>
 

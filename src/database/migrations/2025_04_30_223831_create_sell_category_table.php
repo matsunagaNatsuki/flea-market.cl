@@ -16,7 +16,7 @@ class CreateSellCategoryTable extends Migration
         Schema::create('sell_category', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('sell_id');
-            $table->unsignedBigInteger('category_id')->nullable(false);
+            $table->unsignedBigInteger('category_id');
             $table->timestamps();
 
             $table->foreign('sell_id')->references('id')->on('sells')->onDelete('cascade');
