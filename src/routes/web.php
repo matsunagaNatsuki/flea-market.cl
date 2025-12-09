@@ -40,3 +40,9 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $request->fulfill();
     return redirect('/mypage/profile');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function () {
+    request()->user()->sendEmailVerificationNotification();
+    session()->put('resent', true);
+    return back()->with('message', '確認メールを送信しました！');
+})->middleware(['auth'])->name('verification.send');
