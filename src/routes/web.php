@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
@@ -11,14 +12,13 @@ Route::get('/',[SellController::class, 'index'])->name('items.list');
 Route::get('/item/{item_id}', [SellController::class, 'item']);
 
 Route::middleware(['auth', 'verified',])->group(function () {
+    Route::post('/sell', [SellController::class, 'store'])->name('sells.store');
+    Route::get('/sell', [SellController::class, 'sell'])->name('sells.create');
     Route::get('/purchase/{item_id}', [SellController::class,'purchase'])->name('purchase.show');
     Route::post('/purchase/{item_id}', [SellController::class, 'buy'])->name('purchase.buy');
     Route::get('/purchase/{item_id}/success', [SellController::class, 'success'])->name('purchase.success');
     Route::get('/purchase/address/{item_id}', [SellController::class,'address'])->name('purchase.address');
     Route::post('/purchase/address/{item_id}', [SellController::class,'UpdateAddress'])->name('purchase.address.update');
-    Route::get('/sell', [SellController::class, 'sell']);
-    Route::post('/sell', [SellController::class, 'store']);
-
     Route::post('/sell/{item_id}/like', [SellController::class, 'like'])->middleware('auth')->name('sell.like');
     Route::post('sell/{item_id}/comment', [SellController::class, 'comment'])->middleware('auth')->name('sell.comment');
     Route::get('/mypage', [ProfileController::class, 'mypage']);
