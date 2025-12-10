@@ -2,7 +2,7 @@
 
 ## 環境構築
 **Dockerビルド**
-1. `git clone git@github.com:matsunagaNatsuki/flea-market.git`
+1. `git clone https://github.com/matsunagaNatsuki/flea-market.cl.git`
 2. DockerDesktopアプリを立ち上げる
 3. `docker-compose up -d --build`
 
@@ -61,3 +61,17 @@ php artisan storage:link
 ## URL
 - 開発環境　:http://localhost/
 - phpMyAdmin: http://localhost:8080/
+
+## 採点者の方へ
+
+このリポジトリについて、補足事項を記載いたします。
+これらの項目は事前に運営からの許可を得ています。
+
+1. 12月2日以降のコミットでは、模擬案件提出時に未実装だった箇所を修正しております。
+2. リポジトリ名は `flea-market.cl` で、6月13日に提出した模擬案件のデータをコピーして使用しています。
+3. Stripe機能はプロ試験の出題範囲外との確認をいただいておりますので、未実装です。
+4. 出題範囲に関してプログラムの動作に不備がございましたら、ご指摘いただけますと幸いです。
+
+
+
+
