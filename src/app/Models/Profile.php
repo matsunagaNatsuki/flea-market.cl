@@ -24,9 +24,15 @@ class Profile extends Model
         return $this->belongsTo(User::class, 'user_id')->withTimestamps();
     }
 
-    public function profile()
+    // 他の人を評価したレビュー
+    public function sentReviews()
     {
-        return $this->hasOne(Profile::class);
+        return $this->hasMany(Review::class, 'from_user_id');
     }
 
+    // 自分が受け取ったレビュー
+    public function receivedReviews()
+    {
+        return $this->hasMany(Review::class, 'to_user_id');
+    }
 }

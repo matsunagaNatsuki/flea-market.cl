@@ -63,4 +63,10 @@ class Sell extends Model
         $comments = Comment::where('sell_id', $this->id)->get();
         return $comments;
     }
+
+    public function Messages()
+    {
+        
+
+    }
 }
