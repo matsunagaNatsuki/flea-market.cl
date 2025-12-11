@@ -21,13 +21,20 @@ class ProfileController extends Controller
                 ->where('user_id', $user->id)
                 ->latest()
                 ->get();
+        } elseif ($page === 'trade') {
+        $items = Sell::where('user_id', $user->id)
+            ->where('status', 'trading')
+            ->withCount('comments as message_count')
+            ->latest()
+            ->get();
         } else {
             $page = 'sell';
-
             $items = Sell::where('user_id', $user->id)
                 ->latest()
                 ->get();
         }
+
+
 
         return view('profile', compact('profile', 'user', 'items', 'page'));
     }
@@ -68,6 +75,14 @@ class ProfileController extends Controller
         }
 
         return redirect('/');
+    }
+
+    public function chat(Request $request)
+    {
+        
+
+
+        return view('chat');
     }
 
 }
