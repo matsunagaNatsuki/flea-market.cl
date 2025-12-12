@@ -12,7 +12,6 @@ Route::get('/',[SellController::class, 'index'])->name('items.list');
 Route::get('/item/{item_id}', [SellController::class, 'item']);
 
 Route::middleware(['auth', 'verified',])->group(function () {
-    Route::delete('/chat/{message}', [ProfileController::class, 'destroy'])->name('chat.destroy');
     Route::post('/sell', [SellController::class, 'store'])->name('sells.store');
     Route::get('/sell', [SellController::class, 'sell'])->name('sells.create');
     Route::get('/purchase/{item_id}', [SellController::class,'purchase'])->name('purchase.show');
@@ -37,6 +36,10 @@ Route::middleware(['auth', 'verified',])->group(function () {
     // 取引チャット（購入者）
     Route::get('/chat/buyer/{tradeId}', [ProfileController::class, 'getBuyer'])->name('get.buyer');
     Route::post('/chat/buyer/{tradeId}', [ProfileController::class, 'postBuyer'])->name('post.buyer');
+    // チャット削除機能
+    Route::delete('/chat/{message}', [ProfileController::class, 'destroy'])->name('chat.destroy');
+    // チャット編集機能
+    Route::put('/chat/{message}', [ProfileController::class, 'update'])->name('chat.update');
 });
 
 Route::post('/login', [LoginController::class, 'store']);

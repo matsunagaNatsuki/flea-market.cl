@@ -25,6 +25,17 @@
             <img src="{{ asset('storage/' . $message->image) }}" alt="添付画像" width="150">
             @endif
             <small>{{ $message->created_at->format('Y/m/d H:i') }}</small>
+            <form action="{{ route('chat.destroy', $message->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-sm">削除</button>
+            </form>
+            <form action="{{ route('chat.update', $message->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
+                <button type="submit" class="btn btn-primary mt-2">更新</button>
+            </form>
         </div>
         @endforeach
     </div>

@@ -164,6 +164,24 @@ class ProfileController extends Controller
             return redirect()->back();
         }
     }
+
+    // 編集機能
+    public function update(ChatRequest $request, Message $message)
+    {
+        if($message->user_id !== auth()->id()) {
+            abort(403);
+        } else {
+            $message->body = $request->input('body');
+
+            if ($request->hasFile('image')) {
+                $message->image = $request->file('image')->store('trade', 'public');
+            }
+
+            $message->save();
+
+            return redirect()->route('get.buyer', $message->trade_id);
+        }
+    }
 }
 
 
