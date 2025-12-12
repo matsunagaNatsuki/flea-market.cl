@@ -19,7 +19,7 @@ class CreateTradeMessagesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('sell_id');
             $table->foreign('sell_id')->references('id')->on('sells')->onDelete('cascade');
-            $table->string('body', 255);
+            $table->string('body', 400);
             $table->string('image', 255)->nullable();
             $table->timestamps();
         });
