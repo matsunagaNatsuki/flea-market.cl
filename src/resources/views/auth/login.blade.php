@@ -3,7 +3,6 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 @endsection
 
 @section('content')

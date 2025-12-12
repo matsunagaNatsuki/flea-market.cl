@@ -21,4 +21,9 @@ class Trade extends Model
     {
         return $this->belongsTo(Profile::class, 'buyer_profile_id');
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

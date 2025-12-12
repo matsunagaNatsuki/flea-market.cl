@@ -16,6 +16,8 @@ Route::middleware(['auth', 'verified',])->group(function () {
     Route::get('/sell', [SellController::class, 'sell'])->name('sells.create');
     Route::get('/purchase/{item_id}', [SellController::class,'purchase'])->name('purchase.show');
     Route::post('/purchase/{item_id}', [SellController::class, 'buy'])->name('purchase.buy');
+    // 購入者が取引開始
+    Route::post('/purchase/{sellId}/start', [ProfileController::class, 'startTrade'])->name('trade.start');
     Route::get('/purchase/{item_id}/success', [SellController::class, 'success'])->name('purchase.success');
     Route::get('/purchase/address/{item_id}', [SellController::class,'address'])->name('purchase.address');
     Route::post('/purchase/address/{item_id}', [SellController::class,'UpdateAddress'])->name('purchase.address.update');
@@ -27,9 +29,13 @@ Route::middleware(['auth', 'verified',])->group(function () {
     Route::post('/mypage/profile', [ProfileController::class, 'editProfile']);
     Route::get('/mypage?tab=buy', [ProfileController::class, 'buyList']);
     Route::get('/mypage?tab=sell', [ProfileController::class, 'sellList']);
-    // 取引チャット画面
     Route::get('/mypage?page=trade', [ProfileController::class, 'trade']);
-    Route::get('/chat', [ProfileController::class, 'chat']);
+    // 取引チャット(出品者)
+    Route::get('/chat/seller/{tradeId}', [ProfileController::class, 'getSeller'])->name('get.seller');
+    Route::post('/chat/seller/{tradeId}', [ProfileController::class, 'postSeller'])->name('post.seller');
+    // 取引チャット（購入者）
+    Route::get('/chat/buyer/{tradeId}', [ProfileController::class, 'getBuyer'])->name('get.buyer');
+    Route::post('/chat/buyer/{tradeId}', [ProfileController::class, 'postBuyer'])->name('post.buyer');
 });
 
 Route::post('/login', [LoginController::class, 'store']);

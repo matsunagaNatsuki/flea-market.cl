@@ -69,4 +69,10 @@
     </div>
     <a href="/purchase/address/{{ $sell->id }}">変更する</a>
 </form>
+
+<form action="{{ route('trade.start', $sell->id) }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-primary">取引を開始する</button>
+</form>
+
 <script src="{{ asset('js/purchase.js') }}"></script>

@@ -1,0 +1,183 @@
+/* seller.css */
+
+/* 全体レイアウト */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+/* タイトル（〇〇さんとの取引画面） */
+.container h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* 商品情報エリア */
+.product-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 0 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.product-box img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+.product-box h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.product-box p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* チャット全体の枠 */
+.chat-box {
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+/* 1メッセージの共通スタイル */
+.chat-box .message {
+    max-width: 75%;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+/* 相手メッセージ（左寄せ） */
+.chat-box .other-message {
+    text-align: left;
+}
+
+/* 自分のメッセージ（右寄せ） */
+.chat-box .my-message {
+    margin-left: auto;
+    text-align: right;
+}
+
+/* ユーザー名 */
+.chat-box .message strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: #555;
+}
+
+/* 吹き出し本体 */
+.chat-box .message p {
+    display: inline-block;
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 16px;
+    background-color: #e5e5e5;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+/* 自分の吹き出しだけ色を変える */
+.chat-box .my-message p {
+    background-color: #ffe5ea;
+}
+
+/* 添付画像 */
+.chat-box .message img {
+    display: block;
+    margin-top: 8px;
+    border-radius: 6px;
+    max-width: 150px;
+}
+
+/* 送信時間 */
+.chat-box .message small {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: #999;
+}
+
+/* 送信フォーム */
+.message-form {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.message-form label {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+/* テキストエリア */
+.message-form textarea.form-control {
+    resize: vertical;
+    min-height: 70px;
+    font-size: 14px;
+}
+
+/* 画像追加とボタン横並びにしたい場合 */
+.message-form input[type="file"] {
+    padding: 4px 0;
+    font-size: 13px;
+}
+
+/* 送信ボタンを右寄せ＋丸める */
+.message-form button[type="submit"] {
+    align-self: flex-end;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: none;
+    background-color: #ff7f8c;
+    color: #fff;
+}
+
+.message-form button[type="submit"]:hover {
+    opacity: 0.9;
+}
+
+/* スマホ用の簡単な調整 */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px 10px;
+        padding: 16px;
+    }
+
+    .product-box {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .product-box img {
+        width: 100%;
+        height: auto;
+    }
+
+    .chat-box .message {
+        max-width: 100%;
+    }
+}

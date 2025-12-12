@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
+    protected $table = 'trade_messages';
+
     protected $fillable = [
-        ' user_id',
+        'user_id',
         'sell_id',
         'body',
         'image',
@@ -21,5 +23,10 @@ class Message extends Model
     public function sell()
     {
         return $this->belongsTo(Sell::class);
+    }
+
+    public function trade()
+    {
+        return $this->belongsTo(Trade::class);
     }
 }
