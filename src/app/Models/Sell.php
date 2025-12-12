@@ -69,4 +69,11 @@ class Sell extends Model
         
 
     }
+
+    public function trades()
+    {
+        return $this->hasMany(Trade::class);
+    }
+
+
 }

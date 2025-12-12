@@ -35,4 +35,9 @@ class Profile extends Model
     {
         return $this->hasMany(Review::class, 'to_user_id');
     }
+
+    public function trades()
+    {
+        return $this->hasMany(Trade::class, 'buyer_profile_id');
+    }
 }
