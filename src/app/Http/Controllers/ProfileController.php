@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Buy;
 use App\Models\Sell;
 use App\Models\Trade;
-use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProfileRequest;
-use App\Http\Requests\ChatRequest;
 
 class ProfileController extends Controller
 {
@@ -89,99 +87,6 @@ class ProfileController extends Controller
         ]);
 
         return redirect()->route('get.buyer', $trade->id);
-    }
-
-    // 取引チャット（出品者）
-    public function getSeller(Request $request, $tradeId)
-    {
-        $trade = Trade::where('id', $tradeId)
-            ->with(['sell', 'buyerProfile.user', 'messages.user'])
-            ->firstOrFail();
-
-        return view('seller', compact('trade'));
-    }
-
-    public function postSeller(Request $request)
-    {
-        $message = new Message();
-        $message->sell_id = $request->sell_id;
-        $message->user_id = Auth::id();
-        $message->body = $request->body;
-
-        if ($request->hasFile('image')) {
-            $message->image = $request->file('image')->store('trade', 'public');
-        }
-
-        $message->save();
-
-        return redirect()->back();
-    }
-
-    // 取引チャット（購入者）
-    public function getBuyer(Request $request, $tradeId)
-    {
-        $profile = Profile::where('user_id', Auth::id())->firstOrFail();
-
-        $trade = Trade::where('id', $tradeId)
-            ->where('buyer_profile_id', $profile->id)
-            ->with(['sell.user', 'messages.user'])
-            ->firstOrFail();
-
-        $sell = Sell::with('user')->findOrFail($trade->sell_id);
-
-        return view('buyer', compact('trade', 'profile', 'sell'));
-    }
-
-    public function postBuyer(ChatRequest $request, $tradeId)
-    {
-        $profile = Profile::where('user_id', Auth::id())->firstOrFail();
-
-        $trade = Trade::where('id', $tradeId)
-            ->where('buyer_profile_id', $profile->id)
-            ->with(['messages.user'])
-            ->firstOrFail();
-
-        $message = new Message();
-        $message->trade_id = $trade->id;
-        $message->user_id = Auth::id();
-        $message->body = $request->input('body');
-
-        if ($request->hasFile('image')) {
-            $message->image = $request->file('image')->store('trade', 'public');
-        }
-
-        $message->save();
-
-        return redirect()->back();
-    }
-
-    // 削除機能
-    public function destroy(Message $message)
-    {
-        if($message->user_id !== auth()->id()) {
-            abort(403);
-        } else {
-            $message->delete();
-            return redirect()->back();
-        }
-    }
-
-    // 編集機能
-    public function update(ChatRequest $request, Message $message)
-    {
-        if($message->user_id !== auth()->id()) {
-            abort(403);
-        } else {
-            $message->body = $request->input('body');
-
-            if ($request->hasFile('image')) {
-                $message->image = $request->file('image')->store('trade', 'public');
-            }
-
-            $message->save();
-
-            return redirect()->route('get.buyer', $message->trade_id);
-        }
     }
 }
 

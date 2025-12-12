@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\LoginController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -31,15 +32,15 @@ Route::middleware(['auth', 'verified',])->group(function () {
     Route::get('/mypage?tab=sell', [ProfileController::class, 'sellList']);
     Route::get('/mypage?page=trade', [ProfileController::class, 'trade']);
     // 取引チャット(出品者)
-    Route::get('/chat/seller/{tradeId}', [ProfileController::class, 'getSeller'])->name('get.seller');
-    Route::post('/chat/seller/{tradeId}', [ProfileController::class, 'postSeller'])->name('post.seller');
+    Route::get('/chat/seller/{tradeId}', [ChatController::class, 'getSeller'])->name('get.seller');
+    Route::post('/chat/seller/{tradeId}', [ChatController::class, 'postSeller'])->name('post.seller');
     // 取引チャット（購入者）
-    Route::get('/chat/buyer/{tradeId}', [ProfileController::class, 'getBuyer'])->name('get.buyer');
-    Route::post('/chat/buyer/{tradeId}', [ProfileController::class, 'postBuyer'])->name('post.buyer');
+    Route::get('/chat/buyer/{tradeId}', [ChatController::class, 'getBuyer'])->name('get.buyer');
+    Route::post('/chat/buyer/{tradeId}', [ChatController::class, 'postBuyer'])->name('post.buyer');
     // チャット削除機能
-    Route::delete('/chat/{message}', [ProfileController::class, 'destroy'])->name('chat.destroy');
+    Route::delete('/chat/{message}', [ChatController::class, 'destroy'])->name('chat.destroy');
     // チャット編集機能
-    Route::put('/chat/{message}', [ProfileController::class, 'update'])->name('chat.update');
+    Route::put('/chat/{message}', [ChatController::class, 'update'])->name('chat.update');
 });
 
 Route::post('/login', [LoginController::class, 'store']);
