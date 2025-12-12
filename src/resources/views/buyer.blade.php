@@ -11,7 +11,7 @@
     <h2>{{ $trade->sell->user->name }} の取引画面</h2>
 
     <div class="product-box">
-        <img src="{{ asset('storage/' . $trade->sell->image) }}" alt="商品画像" width="200">
+        <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
         <h3>{{ $trade->sell->name }}</h3>
         <p>価格：¥{{ number_format($trade->sell->price) }}</p>
     </div>

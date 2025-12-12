@@ -115,7 +115,6 @@ class ProfileController extends Controller
         $message->save();
 
         return redirect()->back();
-
     }
 
     // 取引チャット（購入者）
@@ -128,7 +127,9 @@ class ProfileController extends Controller
             ->with(['sell.user', 'messages.user'])
             ->firstOrFail();
 
-        return view('buyer', compact('trade', 'profile'));
+        $sell = Sell::with('user')->findOrFail($trade->sell_id);
+
+        return view('buyer', compact('trade', 'profile', 'sell'));
     }
 
     public function postBuyer(ChatRequest $request, $tradeId)
