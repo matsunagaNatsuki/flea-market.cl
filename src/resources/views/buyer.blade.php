@@ -18,29 +18,102 @@
 
     <div class="chat-box">
         @foreach($trade->messages as $message)
-        <div class="message {{ $message->user_id === Auth::id() ? 'my-message' : 'other-message' }}">
+        <div class="message">
             <strong>{{ $message->user->name }}</strong>
             <p>{{ $message->body }}</p>
             @if($message->image)
-            <img src="{{ asset('storage/' . $msg->image) }}" alt="添付画像" width="150">
+            <img src="{{ asset('storage/' . $message->image) }}" alt="添付画像" width="150">
             @endif
             <small>{{ $message->created_at->format('Y/m/d H:i') }}</small>
         </div>
         @endforeach
     </div>
 
-    <form action="{{ url('/chat/buyer/' . $trade->id) }}" method="POST" enctype="multipart/form-data" class="message-form">
+    <form action="{{ url('/chat/buyer/' . $trade->id) }}" method="POST" enctype="multipart/form-data" class="message-form" novalidate>
         @csrf
         <label for="body">取引メッセージを記入してください</label>
-        <textarea name="body" rows="3" class="form-control" required></textarea>
+        <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control">{{ old('body','') }}</textarea>
+
+
         <label for="image">画像を追加</label>
         <input type="file" name="image" class="form-control">
 
         <button type="submit" class="btn btn-primary mt-2">
-            <i class="fas fa-paper-plane"></i> 送信</button>
+            <i class="fas fa-paper-plane"></i>送信</button>
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
     </form>
 </div>
 
+<script>
+    (function() {
+        const ID = 'chat-body';
 
+        function el() {
+            return document.getElementById(ID);
+        }
 
+        function keyOf(t) {
+            return `chat_draft_trade_${t.dataset.tradeId}_user_${t.dataset.userId}`;
+        }
+
+        function restore(force = false) {
+            const t = el();
+            if (!t) return;
+            const saved = localStorage.getItem(keyOf(t));
+            if (!saved) return;
+
+            if (force || t.value.trim() === '') {
+                t.value = saved;
+            }
+        }
+
+        function save() {
+            const t = el();
+            if (!t) return;
+            const v = t.value;
+            if (v.trim() === '') return;
+            localStorage.setItem(keyOf(t), v);
+        }
+
+        window.addEventListener('pageshow', function() {
+            restore(true);
+            setTimeout(() => restore(true), 0);
+            requestAnimationFrame(() => restore(true));
+        });
+
+        window.addEventListener('pagehide', save);
+
+        let last = null;
+        setInterval(() => {
+            const t = el();
+            if (!t) return;
+            if (t.value !== last) {
+                last = t.value;
+                save();
+            }
+        }, 500);
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => restore(false));
+        } else {
+            restore(false);
+        }
+
+        document.addEventListener('submit', function(e) {
+            const t = el();
+            if (!t) return;
+            if (e.target && e.target.closest('form')) {
+                localStorage.removeItem(keyOf(t));
+            }
+        }, true);
+    })();
+</script>
 @endsection

@@ -10,6 +10,7 @@ use App\Models\Trade;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\ChatRequest;
 
 class ProfileController extends Controller
 {
@@ -79,7 +80,6 @@ class ProfileController extends Controller
 
     public function startTrade(Request $request, $sellId)
     {
-        // 購入者が「取引を開始する」ボタンを押したとき
         $profile = Profile::where('user_id', Auth::id())->firstOrFail();
 
         $trade = Trade::create([
@@ -131,12 +131,13 @@ class ProfileController extends Controller
         return view('buyer', compact('trade', 'profile'));
     }
 
-    public function postBuyer(Request $request, $tradeId)
+    public function postBuyer(ChatRequest $request, $tradeId)
     {
         $profile = Profile::where('user_id', Auth::id())->firstOrFail();
 
         $trade = Trade::where('id', $tradeId)
             ->where('buyer_profile_id', $profile->id)
+            ->with(['messages.user'])
             ->firstOrFail();
 
         $message = new Message();
@@ -151,6 +152,17 @@ class ProfileController extends Controller
         $message->save();
 
         return redirect()->back();
+    }
+
+    // 削除機能
+    public function destroy(Message $message)
+    {
+        if($message->user_id !== auth()->id()) {
+            abort(403);
+        } else {
+            $message->delete();
+            return redirect()->back();
+        }
     }
 }
 

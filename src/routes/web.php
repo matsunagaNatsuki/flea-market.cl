@@ -12,6 +12,7 @@ Route::get('/',[SellController::class, 'index'])->name('items.list');
 Route::get('/item/{item_id}', [SellController::class, 'item']);
 
 Route::middleware(['auth', 'verified',])->group(function () {
+    Route::delete('/chat/{message}', [ProfileController::class, 'destroy'])->name('chat.destroy');
     Route::post('/sell', [SellController::class, 'store'])->name('sells.store');
     Route::get('/sell', [SellController::class, 'sell'])->name('sells.create');
     Route::get('/purchase/{item_id}', [SellController::class,'purchase'])->name('purchase.show');
