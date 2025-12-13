@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="container">
-    <h2>{{ $trade->buyerProfile->name }} の取引画面</h2>
+    <h2>{{ $trade->buyerProfile->name }} さん の取引画面</h2>
 
     <div class="product-box">
         @if (Str::startsWith($sell->image, ['http://', 'https://']))

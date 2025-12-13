@@ -112,6 +112,12 @@ class ChatController extends Controller
 
             $message->save();
 
+            $myProfileId = Profile::where('user_id', auth()->id())->value('id');
+
+            if ($message->trade->seller_profile_id === $myProfileId) {
+                return redirect()->route('get.seller', $message->trade_id);
+            }
+
             return redirect()->route('get.buyer', $message->trade_id);
         }
     }
