@@ -38,6 +38,6 @@ class Profile extends Model
 
     public function trades()
     {
-        return $this->hasMany(Trade::class, 'buyer_profile_id');
+        return $this->hasMany(Trade::class, 'buyer_profile_id', );
     }
 }

@@ -79,12 +79,14 @@ class ProfileController extends Controller
 
     public function startTrade(Request $request, $sellId)
     {
-        $buyerProfile = Profile::where('user_id', Auth::id())->firstOrFail();
         $sell = Sell::with('user.profile')->findOrFail($sellId);
+
+        $sellerProfile = $sell->user->profile;
+        $buyerProfile = Profile::where('user_id', Auth::id())->firstOrFail();
 
         $trade = Trade::create([
             'sell_id' => $sellId,
-            'seller_profile_id' => $sell->user->profile->id,
+            'seller_profile_id' => $sellerProfile->id,
             'buyer_profile_id' => $buyerProfile->id,
             'status' => 'active',
         ]);
