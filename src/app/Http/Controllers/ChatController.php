@@ -16,7 +16,6 @@ class ChatController extends Controller
     public function getSeller(Request $request, $tradeId)
     {
         $trade = Trade::where('id', $tradeId)
-            ->with(['sell', 'buyerProfile.user', 'messages.user'])
             ->firstOrFail();
 
         return view('seller', compact('trade'));

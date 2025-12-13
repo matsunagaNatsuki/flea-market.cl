@@ -29,4 +29,9 @@ class Message extends Model
     {
         return $this->belongsTo(Trade::class);
     }
+
+    public function profile()
+    {
+        
+    }
 }

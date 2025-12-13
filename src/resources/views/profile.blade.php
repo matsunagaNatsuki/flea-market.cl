@@ -21,7 +21,6 @@
     <div class="tab__list">
         <li class="sell__item"><a href="/mypage?page=sell">出品した商品</a></li>
         <li class="buy__item"><a href="/mypage?page=buy">購入した商品</a></li>
-        <li class="trade__item"><a href="/mypage?page=trade">取引中の商品</a></li>
         <li class="trade__item">
             <a href="/mypage?page=trade">
                 取引中の商品 ({{ $items->count() }})
@@ -63,7 +62,7 @@
         @if ($page === 'trade')
         @foreach ($items as $trade)
         <div class="item">
-            <a href="/item/{{ $trade->id }}">
+            <a href="{{ route('get.seller', $trade->id) }}">
                 <div class="item__img--container">
                     <img src="{{ Storage::url($trade->image) }}" class="item__img" alt="商品画像">
                 </div>
