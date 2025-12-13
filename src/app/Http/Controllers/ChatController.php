@@ -24,7 +24,7 @@ class ChatController extends Controller
 
         $sell = Sell::with('user')->findOrFail($trade->sell_id);
 
-        return view('seller', compact('trade', 'sell'));
+        return view('seller', compact('trade', 'sell','profile'));
     }
 
     public function postSeller(ChatRequest $request, $tradeId)

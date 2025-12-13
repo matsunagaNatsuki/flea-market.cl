@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="container">
-    <h2>{{ $trade->buyerProfile->name }} さん の取引画面</h2>
+    <h2>{{ $trade->buyerProfile->name }} さんの取引画面</h2>
 
     <div class="product-box">
         @if (Str::startsWith($sell->image, ['http://', 'https://']))
@@ -22,25 +22,28 @@
 
     <div class="chat-box">
         @foreach($trade->messages as $message)
-        <div class="message">
-            <strong>{{ $message->user->name }}</strong>
-            <p>{{ $message->body }}</p>
-            @if($message->image)
-            <img src="{{ asset('storage/' . $message->image) }}" alt="添付画像" width="150">
-            @endif
-            <small>{{ $message->created_at->format('Y/m/d H:i') }}</small>
-            <form action="{{ route('chat.destroy', $message->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-sm">削除</button>
-            </form>
-            <form action="{{ route('chat.update', $message->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
-                <button type="submit" class="btn btn-primary mt-2">更新</button>
-            </form>
-        </div>
+            <div class="message">
+                <strong>{{ $message->user->name }}</strong>
+                <p>{{ $message->body }}</p>
+                <div class="profile-image">
+                    <img src="{{ optional($message->user->profile)->image ? asset('storage/' . optional($message->user->profile)->image) : asset('images/cat_default_avatar.png') }}"
+                        alt="{{ optional($message->user->profile)->name }}">
+                </div>
+                @if($message->image)
+                    <img src="{{ asset('storage/' . $message->image) }}" alt="添付画像" width="150">
+                @endif
+                <small>{{ $message->created_at->format('Y/m/d H:i') }}</small>
+                <form action="{{ route('chat.destroy', $message->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                <form action="{{ route('chat.update', $message->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                        <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
+                        <button type="submit" class="btn btn-primary mt-2">更新</button>
+                </form>
+            </div>
         @endforeach
     </div>
 
