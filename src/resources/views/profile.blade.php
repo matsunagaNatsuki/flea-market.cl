@@ -35,7 +35,7 @@
         <div class="item">
             <a href="/item/{{ $sell->id }}">
                 <div class="item__img--container">
-                    <img src="{{ Storage::url($sell->image) }}" class="item__img" alt="商品画像">
+                    <img src="{{ $sell->image }}" class="item__img" alt="商品画像">
                 </div>
                 <p class="item__name">{{ $sell->name }}</p>
             </a>
@@ -64,7 +64,7 @@
         <div class="item">
             <a href="{{ route('get.seller', $sell->activeTrade->id) }}">
                 <div class="item__img--container">
-                    <img src="{{ Storage::url($sell->image) }}" class="item__img" alt="商品画像">
+                    <img src="{{ $sell->image }}" class="item__img" alt="商品画像">
                 </div>
                 <p class="item__name">{{ $sell->name }}</p>
             </a>
