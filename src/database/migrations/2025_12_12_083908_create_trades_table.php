@@ -16,11 +16,13 @@ class CreateTradesTable extends Migration
         Schema::create('trades', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sell_id');
+            $table->unsignedBigInteger('seller_profile_id')->nullable();
             $table->unsignedBigInteger('buyer_profile_id');
             $table->enum('status', ['active', 'completed'])->default('active');
             $table->timestamps();
 
             $table->foreign('sell_id')->references('id')->on('sells')->onDelete('cascade');
+            $table->foreign('seller_profile_id')->references('id')->on('profiles')->onDelete('cascade');
             $table->foreign('buyer_profile_id')->references('id')->on('profiles')->onDelete('cascade');
         });
     }
