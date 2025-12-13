@@ -20,6 +20,54 @@
         <p>価格：¥{{ number_format($trade->sell->price) }}</p>
     </div>
 
+    {{-- 取引完了ボタン（購入者側） --}}
+    <button type="button" class="trade-finish-btn" onclick="document.getElementById('reviewModal').showModal()">
+        取引を完了
+    </button>
+
+    <dialog id="reviewModal" class="review-modal">
+
+        @csrf
+
+        <div class="review-modal__header">
+            <h3 class="review-modal__title">取引が完了しました。</h3>
+        </div>
+
+        <div class="review-modal__body">
+            <p class="review-modal__subtitle">今回の取引相手はどうでしたか？</p>
+
+            {{-- 星評価 --}}
+            <div class="review-stars" role="radiogroup" aria-label="評価">
+                <input type="hidden" name="score" id="reviewScore" value="{{ old('score', '') }}">
+
+                @for($i=1; $i<=5; $i++)
+                    <button type="button"
+                    class="review-star"
+                    data-value="{{ $i }}"
+                    aria-label="{{ $i }}点"
+                    aria-pressed="false">
+                    ★
+                    </button>
+                    @endfor
+            </div>
+
+            @error('score')
+            <div class="review-modal__error">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="review-modal__footer">
+            <button type="button" class="review-modal__cancel"
+                onclick="document.getElementById('reviewModal').close()">
+                キャンセル
+            </button>
+
+            <button type="submit" class="review-modal__submit">
+                送信する
+            </button>
+        </div>
+    </dialog>
+
     <div class="chat-box">
         @foreach($trade->messages as $message)
         <div class="message">

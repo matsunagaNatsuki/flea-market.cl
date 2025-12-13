@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     protected $fillable = [
-        'sell_id',
+        'trade_id',
         'from_user_id',
         'to_user_id',
         'score',
-        'comments',
     ];
 
     /**

@@ -15,15 +15,17 @@ class CreateTradeReviewsTable extends Migration
     {
         Schema::create('trade_reviews', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('sell_id');
-            $table->foreign('sell_id')->references('id')->on('sells')->onDelete('cascade');
-            $table->unsignedBigInteger('from_user_id');
-            $table->foreign('from_user_id')->references('id')->on('profiles')->onDelete('cascade');
-            $table->unsignedBigInteger('to_user_id');
-            $table->foreign('to_user_id')->references('id')->on('profiles')->onDelete('cascade');
-            $table->integer('score')->nullable();
-            $table->string('comments', 255)->nullable();
+            $table->unsignedBigInteger('trade_id');
+            $table->unsignedBigInteger('from_user_id'); //ユーザーを評価する
+            $table->unsignedBigInteger('to_user_id'); //ユーザーから評価される
+            $table->integer('score');
             $table->timestamps();
+
+            $table->foreign('trade_id')->references('id')->on('trades')->onDelete('cascade');
+            $table->foreign('from_user_id')->references('id')->on('profiles')->onDelete('cascade');
+            $table->foreign('to_user_id')->references('id')->on('profiles')->onDelete('cascade');
+
+            $table->unique(['trade_id', 'from_user_id']);
         });
     }
 
