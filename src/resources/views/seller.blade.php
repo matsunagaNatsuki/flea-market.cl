@@ -47,6 +47,15 @@
     <form action="{{ url('/chat/seller/' . $trade->id) }}" method="POST" enctype="multipart/form-data" class="message-form" novalidate>
         @csrf
         <label for="body">取引メッセージを記入してください</label>
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
         <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control">{{ old('body','') }}</textarea>
 
 
@@ -55,15 +64,6 @@
 
         <button type="submit" class="btn btn-primary mt-2">
             <i class="fas fa-paper-plane"></i>送信</button>
-        @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
     </form>
 </div>
 

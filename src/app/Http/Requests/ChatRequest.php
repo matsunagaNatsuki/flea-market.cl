@@ -24,6 +24,7 @@ class ChatRequest extends FormRequest
     public function rules()
     {
         return [
+            // bodyのmax400のみ表示できない　TODO
             'body'  => ['required', 'string', 'max:400'],
             'image' => ['nullable', 'mimes:jpeg,png'],
         ];

@@ -27,7 +27,7 @@ class ChatController extends Controller
         return view('seller', compact('trade', 'sell'));
     }
 
-    public function postSeller(Request $request, $tradeId)
+    public function postSeller(ChatRequest $request, $tradeId)
     {
         $profile = Profile::where('user_id', Auth::id())->firstOrFail();
 
