@@ -66,7 +66,12 @@ class Sell extends Model
 
     public function trade()
     {
-        return $this->hasMany(Trade::class);
+        return $this->hasOne(Trade::class);
+    }
+
+    public function activeTrade()
+    {
+        return $this->hasOne(Trade::class)->where('status', 'active');
     }
 
 

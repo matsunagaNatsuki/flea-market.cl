@@ -24,9 +24,8 @@ class ProfileController extends Controller
                 ->get();
         } elseif ($page === 'trade') {
         $items = Sell::where('user_id', $user->id)
-            ->whereHas('trade', function ($query) {
-                $query->where('status', 'active');
-            })
+            ->whereHas('activeTrade')
+            ->with('activeTrade')
             ->withCount('comments as message_count')
             ->latest()
             ->get();
@@ -80,11 +79,13 @@ class ProfileController extends Controller
 
     public function startTrade(Request $request, $sellId)
     {
-        $profile = Profile::where('user_id', Auth::id())->firstOrFail();
+        $buyerProfile = Profile::where('user_id', Auth::id())->firstOrFail();
+        $sell = Sell::with('user.profile')->findOrFail($sellId);
 
         $trade = Trade::create([
             'sell_id' => $sellId,
-            'buyer_profile_id' => $profile->id,
+            'seller_profile_id' => $sell->user->profile->id,
+            'buyer_profile_id' => $buyerProfile->id,
             'status' => 'active',
         ]);
 

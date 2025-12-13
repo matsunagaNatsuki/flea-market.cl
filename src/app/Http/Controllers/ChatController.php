@@ -15,16 +15,28 @@ class ChatController extends Controller
     // 取引チャット（出品者）
     public function getSeller(Request $request, $tradeId)
     {
+        $profile = Profile::where('user_id', Auth::id())->firstOrFail();
+
         $trade = Trade::where('id', $tradeId)
+            ->where('seller_profile_id', $profile->id)
+            ->with(['sell.user', 'messages.user'])
             ->firstOrFail();
 
-        return view('seller', compact('trade'));
+        $sell = Sell::with('user')->findOrFail($trade->sell_id);
+
+        return view('seller', compact('trade', 'sell'));
     }
 
-    public function postSeller(Request $request)
+    public function postSeller(Request $request, $tradeId)
     {
+        $profile = Profile::where('user_id', Auth::id())->firstOrFail();
+
+        $trade = Trade::where('id', $tradeId)
+            ->where('seller_profile_id', $profile->id)
+            ->firstOrFail();
+
         $message = new Message();
-        $message->sell_id = $request->sell_id;
+        $message->trade_id = $trade->id;
         $message->user_id = Auth::id();
         $message->body = $request->body;
 

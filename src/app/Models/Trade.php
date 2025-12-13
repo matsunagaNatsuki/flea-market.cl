@@ -8,6 +8,7 @@ class Trade extends Model
 {
     protected $fillable = [
         'sell_id',
+        'seller_profile_id',
         'buyer_profile_id',
         'status',
     ];
@@ -15,6 +16,11 @@ class Trade extends Model
     public function sell()
     {
         return $this->belongsTo(Sell::class);
+    }
+
+    public function sellerProfile()
+    {
+        return $this->belongsTo(Profile::class, 'seller_profile_id');
     }
 
     public function buyerProfile()
