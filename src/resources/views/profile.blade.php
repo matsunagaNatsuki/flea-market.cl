@@ -22,6 +22,11 @@
         <li class="sell__item"><a href="/mypage?page=sell">出品した商品</a></li>
         <li class="buy__item"><a href="/mypage?page=buy">購入した商品</a></li>
         <li class="trade__item"><a href="/mypage?page=trade">取引中の商品</a></li>
+        <li class="trade__item">
+            <a href="/mypage?page=trade">
+                取引中の商品 ({{ $items->count() }})
+            </a>
+        </li>
     </div>
     <div class="silver-line">
 
