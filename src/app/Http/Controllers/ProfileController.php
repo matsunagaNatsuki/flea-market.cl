@@ -24,7 +24,9 @@ class ProfileController extends Controller
                 ->get();
         } elseif ($page === 'trade') {
         $items = Sell::where('user_id', $user->id)
-            ->where('status', 'trading')
+            ->whereHas('trade', function ($query) {
+                $query->where('status', 'active');
+            })
             ->withCount('comments as message_count')
             ->latest()
             ->get();

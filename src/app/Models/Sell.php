@@ -64,13 +64,7 @@ class Sell extends Model
         return $comments;
     }
 
-    public function Messages()
-    {
-        
-
-    }
-
-    public function trades()
+    public function trade()
     {
         return $this->hasMany(Trade::class);
     }

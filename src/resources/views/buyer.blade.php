@@ -11,7 +11,11 @@
     <h2>{{ $trade->sell->user->name }} の取引画面</h2>
 
     <div class="product-box">
+        @if (Str::startsWith($sell->image, ['http://', 'https://']))
         <img src="{{ $sell->image }}" class="card-img-top img-fluid custom-img" alt="{{ $sell->name }}">
+        @else
+        <img src="{{ Storage::url($trade->sell->image) }}" class="card-img-top img-fluid custom-img" alt="{{ $trade->sell->name }}">
+        @endif
         <h3>{{ $trade->sell->name }}</h3>
         <p>価格：¥{{ number_format($trade->sell->price) }}</p>
     </div>
