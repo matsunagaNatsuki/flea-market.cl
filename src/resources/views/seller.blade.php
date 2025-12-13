@@ -37,6 +37,7 @@
                     @csrf
                     @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                </form>
                 <form action="{{ route('chat.update', $message->id) }}" method="POST">
                     @csrf
                     @method('PUT')

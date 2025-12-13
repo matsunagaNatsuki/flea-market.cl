@@ -25,6 +25,10 @@
         <div class="message">
             <strong>{{ $message->user->name }}</strong>
             <p>{{ $message->body }}</p>
+            <div class="profile-image">
+                <img src="{{ optional($message->user->profile)->image ? asset('storage/' . optional($message->user->profile)->image) : asset('images/cat_default_avatar.png') }}"
+                    alt="{{ optional($message->user->profile)->name }}">
+            </div>
             @if($message->image)
             <img src="{{ asset('storage/' . $message->image) }}" alt="添付画像" width="150">
             @endif
@@ -47,14 +51,6 @@
     <form action="{{ url('/chat/buyer/' . $trade->id) }}" method="POST" enctype="multipart/form-data" class="message-form" novalidate>
         @csrf
         <label for="body">取引メッセージを記入してください</label>
-        <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control">{{ old('body','') }}</textarea>
-
-
-        <label for="image">画像を追加</label>
-        <input type="file" name="image" class="form-control">
-
-        <button type="submit" class="btn btn-primary mt-2">
-            <i class="fas fa-paper-plane"></i>送信</button>
         @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -64,6 +60,14 @@
             </ul>
         </div>
         @endif
+        <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control">{{ old('body','') }}</textarea>
+
+
+        <label for="image">画像を追加</label>
+        <input type="file" name="image" class="form-control">
+
+        <button type="submit" class="btn btn-primary mt-2">
+            <i class="fas fa-paper-plane"></i>送信</button>
     </form>
 </div>
 
