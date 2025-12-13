@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             ConditionsTableSeeder::class,
             SellsTableSeeder::class,
             CategorySeeder::class,
+            ProfileSeeder::class,
         ]);
     }
 }
