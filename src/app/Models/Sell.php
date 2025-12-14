@@ -73,6 +73,4 @@ class Sell extends Model
     {
         return $this->hasOne(Trade::class)->where('status', 'active');
     }
-
-
 }
