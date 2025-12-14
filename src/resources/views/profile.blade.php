@@ -62,7 +62,7 @@
         @if ($page === 'trade')
         @foreach ($items as $sell)
         <div class="item">
-            <a href="{{ route('get.seller', $sell->activeTrade->id) }}">
+            <a href="{{ route('get.seller', $sell->id) }}">
                 <div class="item__img--container">
                     <img src="{{ $sell->image }}" class="item__img" alt="商品画像">
                 </div>

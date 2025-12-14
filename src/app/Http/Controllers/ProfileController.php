@@ -24,11 +24,13 @@ class ProfileController extends Controller
                 ->get();
         } elseif ($page === 'trade') {
             $items = Sell::where('user_id', $user->id)
-                ->whereHas('activeTrade', function ($status) {
-                    $status->where('status', 'active');
+                ->whereHas('trade', function ($query) {
+                    $query->whereIn('status', ['active', 'completed']);
                 })
-                ->with(['activeTrade' => function ($message) {
-                    $message->withCount('messages');
+                ->with(['trade' => function ($query) {
+                    $query->whereIn('status', ['active', 'completed'])
+                        ->latest()
+                        ->withCount('messages');
                 }])
                 ->latest()
                 ->get();
