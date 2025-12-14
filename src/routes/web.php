@@ -42,6 +42,8 @@ Route::middleware(['auth', 'verified',])->group(function () {
     Route::delete('/chat/{message}', [ChatController::class, 'destroy'])->name('chat.destroy');
     // チャット編集機能
     Route::put('/chat/{message}', [ChatController::class, 'update'])->name('chat.update');
+    // 評価用のレビュー
+    Route::post('/chat/{tradeId}/review', [ChatController::class, 'review'])->name('trade.review');
 });
 
 Route::post('/login', [LoginController::class, 'store']);

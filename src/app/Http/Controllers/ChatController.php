@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Sell;
 use App\Models\Trade;
 use App\Models\Message;
+use App\Models\Review;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ChatRequest;
@@ -120,5 +121,30 @@ class ChatController extends Controller
 
             return redirect()->route('get.buyer', $message->trade_id);
         }
+    }
+
+    // 評価用のレビュー
+    public function review(Request $request, $tradeId)
+    {
+        $buyerProfile = Profile::where('user_id', Auth::id())->firstOrFail();
+
+        $trade = Trade::where('id', $tradeId)
+            ->where('buyer_profile_id', $buyerProfile->id)
+            ->firstOrFail();
+
+        Review::updateOrCreate(
+            [
+                'trade_id' => $trade->id,
+                'from_user_id' => $buyerProfile->id,
+            ],
+            [
+                'to_user_id' => $trade->seller_profile_id,
+                'score' => (int)$request->input('score'),
+            ]
+        );
+
+        $trade->update(['status' => 'completed']);
+
+        return redirect('/');
     }
 }

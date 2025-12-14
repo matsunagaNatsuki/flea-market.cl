@@ -21,52 +21,51 @@
     </div>
 
     {{-- 取引完了ボタン（購入者側） --}}
-    <button type="button" class="trade-finish-btn" onclick="document.getElementById('reviewModal').showModal()">
+    <button type="button" class="trade-finish-btn"
+        onclick="document.getElementById('reviewModal').showModal()">
         取引を完了
     </button>
 
     <dialog id="reviewModal" class="review-modal">
+        <form method="POST" action="{{ route('trade.review', $trade->id) }}" class="review-modal__inner">
+            @csrf
 
-        @csrf
-
-        <div class="review-modal__header">
-            <h3 class="review-modal__title">取引が完了しました。</h3>
-        </div>
-
-        <div class="review-modal__body">
-            <p class="review-modal__subtitle">今回の取引相手はどうでしたか？</p>
-
-            {{-- 星評価 --}}
-            <div class="review-stars" role="radiogroup" aria-label="評価">
-                <input type="hidden" name="score" id="reviewScore" value="{{ old('score', '') }}">
-
-                @for($i=1; $i<=5; $i++)
-                    <button type="button"
-                    class="review-star"
-                    data-value="{{ $i }}"
-                    aria-label="{{ $i }}点"
-                    aria-pressed="false">
-                    ★
-                    </button>
-                    @endfor
+            <div class="review-modal__header">
+                <h3 class="review-modal__title">取引が完了しました。</h3>
             </div>
 
-            @error('score')
-            <div class="review-modal__error">{{ $message }}</div>
-            @enderror
-        </div>
+            <div class="review-modal__body">
+                <p class="review-modal__subtitle">今回の取引相手はどうでしたか？</p>
 
-        <div class="review-modal__footer">
-            <button type="button" class="review-modal__cancel"
-                onclick="document.getElementById('reviewModal').close()">
-                キャンセル
-            </button>
+                <div class="review-stars" role="radiogroup" aria-label="評価">
+                    <input type="hidden" name="score" id="reviewScore" value="{{ old('score', '') }}">
 
-            <button type="submit" class="review-modal__submit">
-                送信する
-            </button>
-        </div>
+                    @for($i=1; $i<=5; $i++)
+                        <button type="button" class="review-star"
+                        data-value="{{ $i }}" aria-label="{{ $i }}点" aria-pressed="false">★</button>
+                        @endfor
+                </div>
+
+                @error('score')
+                <div class="review-modal__error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="review-modal__footer">
+                <button type="button" class="review-modal__cancel"
+                    onclick="document.getElementById('reviewModal').close()">
+                    キャンセル
+                </button>
+
+                <button type="submit" class="review-modal__submit">
+                    送信する
+                </button>
+            </div>
+        </form>
     </dialog>
+
+    <script src="{{ asset('js/buyer.js') }}" defer></script>
+
 
     <div class="chat-box">
         @foreach($trade->messages as $message)
@@ -118,69 +117,4 @@
             <i class="fas fa-paper-plane"></i>送信</button>
     </form>
 </div>
-
-<script>
-    (function() {
-        const ID = 'chat-body';
-
-        function el() {
-            return document.getElementById(ID);
-        }
-
-        function keyOf(t) {
-            return `chat_draft_trade_${t.dataset.tradeId}_user_${t.dataset.userId}`;
-        }
-
-        function restore(force = false) {
-            const t = el();
-            if (!t) return;
-            const saved = localStorage.getItem(keyOf(t));
-            if (!saved) return;
-
-            if (force || t.value.trim() === '') {
-                t.value = saved;
-            }
-        }
-
-        function save() {
-            const t = el();
-            if (!t) return;
-            const v = t.value;
-            if (v.trim() === '') return;
-            localStorage.setItem(keyOf(t), v);
-        }
-
-        window.addEventListener('pageshow', function() {
-            restore(true);
-            setTimeout(() => restore(true), 0);
-            requestAnimationFrame(() => restore(true));
-        });
-
-        window.addEventListener('pagehide', save);
-
-        let last = null;
-        setInterval(() => {
-            const t = el();
-            if (!t) return;
-            if (t.value !== last) {
-                last = t.value;
-                save();
-            }
-        }, 500);
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => restore(false));
-        } else {
-            restore(false);
-        }
-
-        document.addEventListener('submit', function(e) {
-            const t = el();
-            if (!t) return;
-            if (e.target && e.target.closest('form')) {
-                localStorage.removeItem(keyOf(t));
-            }
-        }, true);
-    })();
-</script>
 @endsection
