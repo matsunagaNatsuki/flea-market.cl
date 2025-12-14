@@ -23,12 +23,15 @@ class ProfileController extends Controller
                 ->latest()
                 ->get();
         } elseif ($page === 'trade') {
-        $items = Sell::where('user_id', $user->id)
-            ->whereHas('activeTrade')
-            ->with('activeTrade')
-            ->withCount('comments as message_count')
-            ->latest()
-            ->get();
+            $items = Sell::where('user_id', $user->id)
+                ->whereHas('activeTrade', function ($status) {
+                    $status->where('status', 'active');
+                })
+                ->with(['activeTrade' => function ($message) {
+                    $message->withCount('messages');
+                }])
+                ->latest()
+                ->get();
         } else {
             $page = 'sell';
             $items = Sell::where('user_id', $user->id)
@@ -36,7 +39,11 @@ class ProfileController extends Controller
                 ->get();
         }
 
-        return view('profile', compact('profile', 'user', 'items', 'page'));
+        $tradeMessageCount = $items->sum(function ($sell) {
+            return optional($sell->activeTrade)->messages_count ?? 0;
+        });
+
+        return view('profile', compact('profile', 'user', 'items', 'page', 'tradeMessageCount'));
     }
 
     public function showProfile()
@@ -77,7 +84,7 @@ class ProfileController extends Controller
         return redirect('/');
     }
 
-    public function startTrade(Request $request, $sellId)
+    public function startTrade($sellId)
     {
         $sell = Sell::with('user.profile')->findOrFail($sellId);
 

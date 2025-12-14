@@ -23,7 +23,7 @@
         <li class="buy__item"><a href="/mypage?page=buy">購入した商品</a></li>
         <li class="trade__item">
             <a href="/mypage?page=trade">
-                取引中の商品 ({{ $items->count() }})
+                取引中の商品 ({{ $tradeMessageCount }})
             </a>
         </li>
     </div>
