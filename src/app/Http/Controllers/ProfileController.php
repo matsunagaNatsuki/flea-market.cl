@@ -23,14 +23,13 @@ class ProfileController extends Controller
                 ->latest()
                 ->get();
         } elseif ($page === 'trade') {
-            $items = Sell::where('user_id', $user->id)
-                ->whereHas('activeTrade', function ($status) {
-                    $status->where('status', 'active');
+            $items = Trade::where('status', 'active')
+                ->whereHas('sell', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
                 })
-                ->with(['activeTrade' => function ($message) {
-                    $message->withCount('messages');
-                }])
-                ->latest()
+                ->with('sell')
+                ->withCount('messages')
+                ->latest('updated_at')
                 ->get();
         } else {
             $page = 'sell';
@@ -39,9 +38,7 @@ class ProfileController extends Controller
                 ->get();
         }
 
-        $tradeMessageCount = $items->sum(function ($sell) {
-            return optional($sell->activeTrade)->messages_count ?? 0;
-        });
+        $tradeMessageCount = $items->sum('messages_count');
 
         return view('profile', compact('profile', 'user', 'items', 'page', 'tradeMessageCount'));
     }

@@ -15,8 +15,8 @@ class CreateTradesTable extends Migration
     {
         Schema::create('trades', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sell_id');
-            $table->unsignedBigInteger('seller_profile_id')->nullable();
+            $table->unsignedBigInteger('sell_id')->unique();
+            $table->unsignedBigInteger('seller_profile_id');
             $table->unsignedBigInteger('buyer_profile_id');
             $table->enum('status', ['active', 'completed'])->default('active');
             $table->timestamps();

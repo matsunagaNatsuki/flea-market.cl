@@ -60,13 +60,13 @@
 
         {{-- 取引タブ --}}
         @if ($page === 'trade')
-        @foreach ($items as $sell)
+        @foreach ($items as $trade)
         <div class="item">
-            <a href="{{ route('get.seller', $sell->id) }}">
+            <a href="{{ route('get.seller', $trade->id) }}">
                 <div class="item__img--container">
-                    <img src="{{ $sell->image }}" class="item__img" alt="商品画像">
+                    <img src="{{ $trade->sell->image }}" class="item__img" alt="商品画像">
                 </div>
-                <p class="item__name">{{ $sell->name }}</p>
+                <p class="item__name">{{ $trade->sell->name }}</p>
             </a>
         </div>
         @endforeach
