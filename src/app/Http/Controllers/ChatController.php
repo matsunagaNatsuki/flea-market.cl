@@ -24,9 +24,15 @@ class ChatController extends Controller
             ->with(['sell.user', 'messages.user'])
             ->firstOrFail();
 
+        $sidebarTrades = Trade::where('status', 'active')
+            ->where('seller_profile_id', $profile->id)
+            ->with('sell')
+            ->latest('updated_at')
+            ->get();
+
         $sell = Sell::with('user')->findOrFail($trade->sell_id);
 
-        return view('seller', compact('trade', 'sell','profile'));
+        return view('seller', compact('trade', 'sell','profile', 'sidebarTrades'));
     }
 
     public function postSeller(ChatRequest $request, $tradeId)
