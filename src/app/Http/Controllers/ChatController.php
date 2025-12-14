@@ -10,6 +10,7 @@ use App\Models\Review;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ChatRequest;
+use Illuminate\Support\Facades\Mail;
 
 class ChatController extends Controller
 {
@@ -130,6 +131,7 @@ class ChatController extends Controller
 
         $trade = Trade::where('id', $tradeId)
             ->where('buyer_profile_id', $buyerProfile->id)
+            ->with(['sell.user'])
             ->firstOrFail();
 
         Review::updateOrCreate(
@@ -144,6 +146,15 @@ class ChatController extends Controller
         );
 
         $trade->update(['status' => 'completed']);
+        $sellerEmail = $trade->sell->user->email;
+
+        Mail::raw(
+            "購入者が取引を完了しました。\n商品: {$trade->sell->name}\n価格: ¥" . number_format($trade->sell->price),
+            function ($message) use ($sellerEmail) {
+                $message->to($sellerEmail)
+                    ->subject('【取引完了】購入者が取引を完了しました');
+            }
+        );
 
         return redirect('/');
     }
