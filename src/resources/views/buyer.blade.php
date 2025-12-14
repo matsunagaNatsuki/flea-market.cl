@@ -27,7 +27,7 @@
     </button>
 
     <dialog id="reviewModal" class="review-modal">
-        <form method="POST" action="{{ route('trade.review', $trade->id) }}" class="review-modal__inner">
+        <form method="POST" action="{{ route('buyer.review', $trade->id) }}" class="review-modal__inner">
             @csrf
 
             <div class="review-modal__header">

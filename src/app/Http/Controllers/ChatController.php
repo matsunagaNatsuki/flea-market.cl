@@ -24,7 +24,7 @@ class ChatController extends Controller
             ->with(['sell.user', 'messages.user'])
             ->firstOrFail();
 
-        $sidebarTrades = Trade::where('status', 'active')
+        $sidebarTrades = Trade::whereIn('status', ['active', 'completed'])
             ->where('seller_profile_id', $profile->id)
             ->with('sell')
             ->latest('updated_at')
@@ -32,7 +32,14 @@ class ChatController extends Controller
 
         $sell = Sell::with('user')->findOrFail($trade->sell_id);
 
-        return view('seller', compact('trade', 'sell','profile', 'sidebarTrades'));
+        $sellerHasReviewed = Review::where('trade_id', $trade->id)
+            ->where('from_user_id', $profile->id)
+            ->exists();
+
+        $shouldOpenCompleteModal = ($trade->status === 'completed') && (!$sellerHasReviewed);
+
+
+        return view('seller', compact('trade', 'sell','profile', 'sidebarTrades', 'sellerHasReviewed', 'shouldOpenCompleteModal'));
     }
 
     public function postSeller(ChatRequest $request, $tradeId)
@@ -130,8 +137,25 @@ class ChatController extends Controller
         }
     }
 
-    // 評価用のレビュー
-    public function review(Request $request, $tradeId)
+    // 出品者用の評価レビュー
+    public function sellerReview(Request $request, $tradeId)
+    {
+        $sellerProfile = Profile::where('user_id', Auth::id())->firstOrFail();
+
+        $trade = Trade::where('id', $tradeId)
+            ->where('seller_profile_id', $sellerProfile->id)
+            ->firstOrFail();
+
+        Review::updateOrCreate(
+            ['trade_id' => $trade->id, 'from_user_id' => $sellerProfile->id],
+            ['to_user_id' => $trade->buyer_profile_id, 'score' => (int)$request->score]
+        );
+
+        return redirect('/');
+    }
+
+    //購入者用の評価レビュー
+    public function buyerReview(Request $request, $tradeId)
     {
         $buyerProfile = Profile::where('user_id', Auth::id())->firstOrFail();
 

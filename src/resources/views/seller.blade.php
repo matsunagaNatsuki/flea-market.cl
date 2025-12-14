@@ -85,7 +85,46 @@
             </div>
         </a>
         @endforeach
+        <div class="sidebar-message">
+            @if(($trades->messages_count ?? 0) > 0)
+            < class="badge badge-message">{{ $trades->messages_count }}件</
+                @endif
+                </div>
     </aside>
+</div>
+
+<dialog id="sellerReviewModal" class="review-modal">
+    <form method="POST" action="{{ route('seller.review', $trade->id) }}" class="review-modal__inner">
+        @csrf
+        <div class="review-modal__header">
+            <h3 class="review-modal__title">取引が完了しました。</h3>
+        </div>
+
+        <div class="review-modal__body">
+            <p class="review-modal__subtitle">今回の取引相手はどうでしたか？</p>
+
+            <div class="review-stars">
+                <input type="hidden" name="score" id="sellerReviewScore" value="{{ old('score', '') }}">
+                @for($i=1; $i<=5; $i++)
+                    <button type="button" class="review-star" data-value="{{ $i }}">★</button>
+                    @endfor
+            </div>
+        </div>
+
+        <div class="review-modal__footer">
+            <button type="submit" class="review-modal__submit">送信する</button>
+        </div>
+    </form>
+</dialog>
+@if(!empty($shouldOpenCompleteModal) && $shouldOpenCompleteModal)
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const d = document.getElementById('sellerReviewModal');
+        if (d) d.showModal();
+    });
+</script>
+@endif
 
 
-            @endsection
+
+@endsection

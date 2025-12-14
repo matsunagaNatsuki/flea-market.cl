@@ -61,16 +61,26 @@
         {{-- 取引タブ --}}
         @if ($page === 'trade')
         @foreach ($items as $sell)
+        @php
+        // activeがあればactiveを優先、なければcompleted
+        $activeTrade = $sell->trade->firstWhere('status', 'active');
+        $completedTrade = $sell->trade->firstWhere('status', 'completed');
+        $targetTrade = $activeTrade ?: $completedTrade;
+        @endphp
+
+        @if($targetTrade)
         <div class="item">
-            <a href="{{ route('get.seller', $sell->id) }}">
+            <a href="{{ route('get.seller', $targetTrade->id) }}">
                 <div class="item__img--container">
                     <img src="{{ $sell->image }}" class="item__img" alt="商品画像">
                 </div>
                 <p class="item__name">{{ $sell->name }}</p>
             </a>
         </div>
+        @endif
         @endforeach
         @endif
+
 
     </div>
     @endsection
