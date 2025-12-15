@@ -16,13 +16,17 @@ class CreateTradeMessagesTable extends Migration
         Schema::create('trade_messages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('trade_id');
-            $table->foreign('trade_id')->references('id')->on('trades')->onDelete('cascade');
             $table->string('body', 400);
             $table->string('image', 255)->nullable();
+            $table->boolean('read_by_seller')->default(false);
+            $table->boolean('read_by_buyer')->default(false);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('trade_id')->references('id')->on('trades')->onDelete('cascade');
         });
+
     }
 
     /**
