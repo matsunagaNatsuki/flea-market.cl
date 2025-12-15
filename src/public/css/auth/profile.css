@@ -99,3 +99,17 @@
     margin-left: 10px;
 }
 
+.profile-rating {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.profile-rating__stars span {
+    opacity: .25;
+}
+
+.profile-rating__stars span.is-on {
+    opacity: 1;
+}
+

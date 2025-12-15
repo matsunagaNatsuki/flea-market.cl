@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Buy;
 use App\Models\Sell;
 use App\Models\Trade;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProfileRequest;
 
@@ -40,7 +41,15 @@ class ProfileController extends Controller
 
         $tradeMessageCount = $items->sum('messages_count');
 
-        return view('profile', compact('profile', 'user', 'items', 'page', 'tradeMessageCount'));
+        $reviewCount = Review::where('to_user_id', $profile->id)->count();
+
+        $reviewAvg = null;
+        if ($reviewCount > 0) {
+            $avg = Review::where('to_user_id', $profile->id)->avg('score');
+            $reviewAvg = (int) round($avg);
+        }
+
+        return view('profile', compact('profile', 'user', 'items', 'page', 'tradeMessageCount', 'reviewCount', 'reviewAvg'));
     }
 
     public function showProfile()

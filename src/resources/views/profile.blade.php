@@ -13,6 +13,16 @@
                 alt="{{ optional($profile)->name }}">
         </div>
         <h2 class="profile-name">{{ optional($profile)->name }}</h2>
+        @if(!is_null($reviewAvg))
+            <div class="profile-rating">
+                <span class="profile-rating__stars" aria-label="評価 {{ $reviewAvg }} / 5">
+                    @for($i=1; $i<=5; $i++)
+                        <span class="{{ $i <= $reviewAvg ? 'is-on' : '' }}">★</span>
+                    @endfor
+                </span>
+            </div>
+        @endif
+
         <div class="btn">
             <a href="mypage/profile">プロフィールを編集</a>
         </div>
