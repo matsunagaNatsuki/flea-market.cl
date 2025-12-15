@@ -8,6 +8,39 @@
 
 @section('content')
 <div class="container">
+    <!-- 評価 -->
+    <dialog id="sellerReviewModal" class="review-modal">
+        <form method="POST" action="{{ route('seller.review', $trade->id) }}" class="review-modal__inner">
+            @csrf
+            <div class="review-modal__header">
+                <h3 class="review-modal__title">取引が完了しました。</h3>
+            </div>
+
+            <div class="review-modal__body">
+                <p class="review-modal__subtitle">今回の取引相手はどうでしたか？</p>
+
+                <div class="review-stars" role="radiogroup" aria-label="評価">
+                    <input type="hidden" name="score" id="sellerReviewScore" value="{{ old('score', '') }}">
+
+                    @for($i=1; $i<=5; $i++)
+                        <button type="button" class="review-star" data-value="{{ $i }}" aria-label="{{ $i }}点" aria-pressed="false">★</button>
+                        @endfor
+                </div>
+            </div>
+
+            <div class="review-modal__footer">
+                <button type="button" class="review-modal__cancel"
+                    onclick="document.getElementById('sellerReviewModal').close()">
+                    キャンセル
+                </button>
+
+                <button type="submit" class="review-modal__submit">
+                    送信する
+                </button>
+            </div>
+        </form>
+    </dialog>
+
     <h2>{{ $trade->buyerProfile->name }} さんの取引画面</h2>
 
     <div class="product-box">
@@ -90,46 +123,16 @@
                 </div>
     </aside>
 </div>
-<!-- 評価 -->
-<dialog id="sellerReviewModal" class="review-modal">
-    <form method="POST" action="{{ route('seller.review', $trade->id) }}" class="review-modal__inner">
-        @csrf
-        <div class="review-modal__header">
-            <h3 class="review-modal__title">取引が完了しました。</h3>
-        </div>
-
-        <div class="review-modal__body">
-            <p class="review-modal__subtitle">今回の取引相手はどうでしたか？</p>
-
-            <div class="review-stars" role="radiogroup" aria-label="評価">
-                <input type="hidden" name="score" id="reviewScore" value="{{ old('score', '') }}">
-
-                @for($i=1; $i<=5; $i++)
-                    <button type="button" class="review-star" data-value="{{ $i }}" aria-label="{{ $i }}点" aria-pressed="false">★</button>
-                @endfor
-            </div>
-        </div>
-
-        <div class="review-modal__footer">
-            <button type="button" class="review-modal__cancel"
-                onclick="document.getElementById('reviewModal').close()">
-                キャンセル
-            </button>
-
-            <button type="submit" class="review-modal__submit">
-                送信する
-            </button>
-        </div>
-    </form>
-</dialog>
 
 @if(!empty($shouldOpenCompleteModal) && $shouldOpenCompleteModal)
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const d = document.getElementById('sellerReviewModal');
         if (d) d.showModal();
+        initReviewStars('sellerReviewModal', 'sellerReviewScore');
     });
 </script>
 @endif
+
 
 @endsection
