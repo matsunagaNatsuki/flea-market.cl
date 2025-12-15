@@ -103,12 +103,19 @@ class ProfileController extends Controller
         $sellerProfile = $sell->user->profile;
         $buyerProfile = Profile::where('user_id', Auth::id())->firstOrFail();
 
-        $trade = Trade::create([
-            'sell_id' => $sellId,
-            'seller_profile_id' => $sellerProfile->id,
-            'buyer_profile_id' => $buyerProfile->id,
-            'status' => 'active',
-        ]);
+        $trade = Trade::where('sell_id', $sell->id)
+            ->where('buyer_profile_id', $buyerProfile->id)
+            ->where('status', 'active')
+            ->first();
+
+        if (!$trade) {
+            $trade = Trade::create([
+                'sell_id'           => $sell->id,
+                'seller_profile_id' => $sellerProfile->id,
+                'buyer_profile_id'  => $buyerProfile->id,
+                'status'            => 'active',
+            ]);
+        }
 
         return redirect()->route('get.buyer', $trade->id);
     }
