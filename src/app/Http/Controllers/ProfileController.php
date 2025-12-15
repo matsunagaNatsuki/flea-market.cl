@@ -30,6 +30,12 @@ class ProfileController extends Controller
                 })
                 ->with('sell')
                 ->withCount('messages')
+                ->withCount([
+                    'messages as unread_count' => function ($q) {
+                        $q->where('read_by_seller', false)
+                            ->where('user_id', '!=', auth()->id());
+                    }
+                ])
                 ->latest('updated_at')
                 ->get();
         } else {

@@ -86,6 +86,7 @@
     overflow: hidden;
     margin-top: 20px;
     margin-left: 10px;
+    position: relative;
 }
 
 .item__img {
@@ -111,5 +112,22 @@
 
 .profile-rating__stars span.is-on {
     opacity: 1;
+}
+
+
+.item__badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 22px;
+    text-align: center;
+    background: #e53935;
+    color: #fff;
+    font-weight: 700;
 }
 

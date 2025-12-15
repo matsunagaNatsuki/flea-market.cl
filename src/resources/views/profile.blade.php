@@ -74,7 +74,10 @@
         <div class="item">
             <a href="{{ route('get.seller', $trade->id) }}">
                 <div class="item__img--container">
-                    <img src="{{ $trade->sell->image }}" class="item__img" alt="商品画像">
+                    <img id= item__badge src="{{ $trade->sell->image }}" class="item__img" alt="商品画像">
+                    @if(($trade->unread_count ?? 0) > 0)
+                        <span class="item__badge">{{ $trade->unread_count }}</span>
+                    @endif
                 </div>
                 <p class="item__name">{{ $trade->sell->name }}</p>
             </a>
