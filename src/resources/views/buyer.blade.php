@@ -64,9 +64,6 @@
         </form>
     </dialog>
 
-    <script src="{{ asset('js/buyer.js') }}" defer></script>
-
-
     <div class="chat-box">
         @foreach($trade->messages as $message)
         <div class="message">
@@ -77,10 +74,10 @@
                     alt="{{ optional($message->user->profile)->name }}">
             </div>
             @if($message->image)
-            <img src="{{ asset('storage/' . $message->image) }}" alt="添付画像" width="150">
+                <img src="{{ asset('storage/' . $message->image) }}" alt="添付画像" width="150">
             @endif
-            <small>{{ $message->created_at->format('Y/m/d H:i') }}</small>
-            <form action="{{ route('chat.destroy', $message->id) }}" method="POST" style="display:inline;">
+                <small>{{ $message->created_at->format('Y/m/d H:i') }}</small>
+                <form action="{{ route('chat.destroy', $message->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger btn-sm">削除</button>
@@ -116,5 +113,6 @@
         <button type="submit" class="btn btn-primary mt-2">
             <i class="fas fa-paper-plane"></i>送信</button>
     </form>
+    <script src="{{ asset('js/chat.js') }}"></script>
 </div>
 @endsection
