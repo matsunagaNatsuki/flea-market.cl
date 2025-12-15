@@ -26,10 +26,10 @@
         取引を完了
     </button>
 
+    <!-- 評価 -->
     <dialog id="reviewModal" class="review-modal">
         <form method="POST" action="{{ route('buyer.review', $trade->id) }}" class="review-modal__inner">
             @csrf
-
             <div class="review-modal__header">
                 <h3 class="review-modal__title">取引が完了しました。</h3>
             </div>
@@ -43,12 +43,8 @@
                     @for($i=1; $i<=5; $i++)
                         <button type="button" class="review-star"
                         data-value="{{ $i }}" aria-label="{{ $i }}点" aria-pressed="false">★</button>
-                        @endfor
+                    @endfor
                 </div>
-
-                @error('score')
-                <div class="review-modal__error">{{ $message }}</div>
-                @enderror
             </div>
 
             <div class="review-modal__footer">

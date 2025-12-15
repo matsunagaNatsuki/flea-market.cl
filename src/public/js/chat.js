@@ -96,3 +96,39 @@
             paint(score);
         });
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const sellerDialog = document.getElementById('sellerReviewModal');
+    if (sellerDialog) {
+        const stars = Array.from(sellerDialog.querySelectorAll('.review-star'));
+        const input = sellerDialog.querySelector('#sellerReviewScore');
+
+        function paint(score) {
+            stars.forEach(btn => {
+                const v = Number(btn.dataset.value);
+                const on = v <= score;
+                btn.classList.toggle('is-on', on);
+                btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+        }
+
+        const init = Number(input?.value || 0);
+        if (init) paint(init);
+
+        stars.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const score = Number(btn.dataset.value);
+                input.value = score;
+                paint(score);
+            });
+
+            btn.addEventListener('mouseenter', () => paint(Number(btn.dataset.value)));
+        });
+
+        sellerDialog.addEventListener('mouseleave', () => {
+            const score = Number(input?.value || 0);
+            paint(score);
+        });
+    }
+});
+
