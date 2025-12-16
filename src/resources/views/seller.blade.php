@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="container">
-    <!-- 購入者が取引完了を謳歌したら出品者側に評価モーダルが表示されます -->
+    <!-- 購入者側が取引完了を行うと出品者側に評価モーダルが表示されます -->
     <dialog id="sellerReviewModal" class="review-modal">
         <form method="POST" action="{{ route('seller.review', $trade->id) }}" class="review-modal__inner">
             @csrf
@@ -29,10 +29,6 @@
             </div>
 
             <div class="review-modal__footer">
-                <button type="button" class="review-modal__cancel"
-                    onclick="document.getElementById('sellerReviewModal').close()">
-                    キャンセル
-                </button>
 
                 <button type="submit" class="review-modal__submit">
                     送信する

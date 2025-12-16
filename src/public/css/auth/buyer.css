@@ -1,4 +1,6 @@
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
@@ -12,23 +14,44 @@ body {
     margin-top: 60px;
 }
 
-.buyer-profile {
+.review-modal__inner {
+    background-color: lightyellow;
+}
+
+.seller-profile {
     display: flex;
     align-items: center;
     gap: 16px;
     margin-bottom: 24px;
 }
 
-.buyer-profile h1 {
+.seller-profile h1 {
     font-size: 40px;
     margin: 0;
 }
 
-.buyer-profile .profile-image img {
+.seller-profile .profile-image img {
     width: 80px;
     height: 80px;
     object-fit: cover;
     border-radius: 50%;
+}
+
+#profile_preview {
+    width: 100px;
+    height: auto;
+}
+
+.trade-finish-btn{
+    position: absolute;
+        right: 250px;
+    font-size: 30px;
+    background-color: #ff6666;
+    color: white;
+    border-radius: 100px;
+    padding: 10px 20px;
+    border: 2px solid white;
+
 }
 
 
@@ -148,8 +171,13 @@ body {
     cursor: pointer;
 }
 
-.message .btn-danger { color: #666; }
-.message .btn-primary { color: #333; }
+.message .btn-danger {
+    color: #666;
+}
+
+.message .btn-primary {
+    color: #333;
+}
 
 .message-form {
     position: fixed;
@@ -167,8 +195,8 @@ body {
 }
 
 /* 入力欄 */
-.message-form textarea {
-    width: 100%;
+.message-form textarea.form-control {
+    width: 80%;
     height: 44px;
     resize: none;
     border: 2px solid #777;
@@ -179,7 +207,7 @@ body {
 
 /* ファイル */
 .message-form input[type="file"].form-control {
-    width: 100%;
+    width: 150px;
     border: 2px solid #e26b6b;
     color: #e26b6b;
     background: #fff;
@@ -188,7 +216,6 @@ body {
     cursor: pointer;
 }
 
-/* 送信ボタン（紙飛行機っぽい） */
 .message-form button[type="submit"] {
     width: 52px;
     height: 44px;
@@ -199,7 +226,6 @@ body {
     font-size: 14px;
 }
 
-/* エラー表示（フォーム内） */
 .alert.alert-danger {
     grid-column: 1 / -1;
     margin: 8px 0 0;
@@ -242,7 +268,7 @@ body {
     border-radius: 4px;
     padding: 10px 10px;
     border: 1px solid #cfcfcf;
-    }
+}
 
 .trade-sidebar__name {
     margin: 0;
@@ -261,11 +287,11 @@ body {
     border: 0;
     border-radius: 10px;
     padding: 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
 }
 
 .review-modal::backdrop {
-    background: rgba(0,0,0,.35);
+    background: rgba(0, 0, 0, .35);
 }
 
 .review-modal__inner {
@@ -334,11 +360,9 @@ label.image-btn {
     padding: 8px 12px;
     border: 2px solid red;
     color: red !important;
-    border-radius : 4px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 700;
     height: 40px;
     margin-top: -10px;
 }
-
-
