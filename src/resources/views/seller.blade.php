@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="container">
-    <!-- 評価 -->
+    <!-- 購入者が取引完了を謳歌したら出品者側に評価モーダルが表示されます -->
     <dialog id="sellerReviewModal" class="review-modal">
         <form method="POST" action="{{ route('seller.review', $trade->id) }}" class="review-modal__inner">
             @csrf
@@ -40,8 +40,16 @@
             </div>
         </form>
     </dialog>
+    <div class="buyer-profile">
+        <div class="profile-image">
+            <img id="profile_preview"
+                src="{{ optional($trade->buyerProfile)->image ? asset('storage/' . optional($trade->buyerProfile)->image) : asset('images/cat_default_avatar.png') }}"
+                alt="{{ optional($trade->buyerProfile)->name }}">
+        </div>
+        <h1>「{{ $trade->buyerProfile->name }}」 さんとの取引画面</h1>
+    </div>
 
-    <h2>{{ $trade->buyerProfile->name }} さんの取引画面</h2>
+    <div class="border"></div>
 
     <div class="product-box">
         @if (Str::startsWith($sell->image, ['http://', 'https://']))
@@ -53,86 +61,103 @@
         <p>価格：¥{{ number_format($trade->sell->price) }}</p>
     </div>
 
+    <div class="border"></div>
+
     <div class="chat-box">
         @foreach($trade->messages as $message)
-        <div class="message">
-            <strong>{{ $message->user->name }}</strong>
-            <p>{{ $message->body }}</p>
-            <div class="profile-image">
-                <img src="{{ optional($message->user->profile)->image ? asset('storage/' . optional($message->user->profile)->image) : asset('images/cat_default_avatar.png') }}"
-                    alt="{{ optional($message->user->profile)->name }}">
+        @php
+        $isMe = ($message->user_id === auth()->id());
+        @endphp
+
+        <div class="message {{ $isMe ? 'message--me' : 'message--other' }}">
+            <div class="message__meta">
+                <div class="profile-image">
+                    <img src="{{ optional($message->user->profile)->image ? asset('storage/' . optional($message->user->profile)->image) : asset('images/cat_default_avatar.png') }}"
+                        alt="{{ optional($message->user->profile)->name }}">
+                </div>
+                <strong class="message__name">{{ $message->user->profile->name }}</strong>
             </div>
-            @if($message->image)
-            <img src="{{ asset('storage/' . $message->image) }}" alt="添付画像" width="150">
-            @endif
-            <small>{{ $message->created_at->format('Y/m/d H:i') }}</small>
-            <form action="{{ route('chat.destroy', $message->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-sm">削除</button>
-            </form>
-            <form action="{{ route('chat.update', $message->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
-                <button type="submit" class="btn btn-primary mt-2">更新</button>
-            </form>
+
+            <div class="message__content">
+                <p class="message__bubble">{{ $message->body }}</p>
+
+                @if($message->image)
+                <img class="message__img" src="{{ asset('storage/' . $message->image) }}" alt="添付画像">
+                @endif
+                <small class="message__time">{{ $message->created_at->format('Y/m/d H:i') }}</small>
+
+                @if($isMe)
+                <div class="message__actions">
+                    <form action="{{ route('chat.destroy', $message->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                    </form>
+                    <form action="{{ route('chat.update', $message->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
+                        <button type="submit" class="btn btn-primary mt-2">更新</button>
+                    </form>
+                </div>
+                @endif
+            </div>
+            @endforeach
         </div>
-        @endforeach
+
+        <form action="{{ url('/chat/seller/' . $trade->id) }}" method="POST" enctype="multipart/form-data" class="message-form" novalidate>
+            @csrf
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control" placeholder="取引メッセージを入力してください">{{ old('body','') }}</textarea>
+
+            <input type="file" id="image" name="image" style="display:none;">
+            <label for="image" class="image-btn">画像を追加</label>
+
+
+
+            <button type="submit" class="btn btn-primary mt-2">
+                <i class="fas fa-paper-plane"></i>送信</button>
+        </form>
+        <script src="{{ asset('js/chat.js') }}"></script>
     </div>
 
-    <form action="{{ url('/chat/seller/' . $trade->id) }}" method="POST" enctype="multipart/form-data" class="message-form" novalidate>
-        @csrf
-        <label for="body">取引メッセージを記入してください</label>
-        @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
-        <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control">{{ old('body','') }}</textarea>
+    <!-- サイドバー -->
+    <div class="trade-sidebar">
+        <aside class="trade-sidebar">
+            <h3 class="trade-sidebar__title">その他の取引
+            @foreach($sidebarTrades as $trades)
+            <a href="{{ route('get.seller', $trades->id) }}" class="trade-sidebar__item" {{ $trades->id === $trade->id ? 'is-active' : '' }}">
 
-        <label for="image">画像を追加</label>
-        <input type="file" name="image" class="form-control">
-
-        <button type="submit" class="btn btn-primary mt-2">
-            <i class="fas fa-paper-plane"></i>送信</button>
-    </form>
-    <script src="{{ asset('js/chat.js') }}"></script>
-</div>
-
-<div class="trade-sidebar">
-    <aside class="trade-sidebar">
-        <h3 class="trade-sidebar__title">他の取引中の商品</h3>
-
-        @foreach($sidebarTrades as $trades)
-        <a href="{{ route('get.seller', $trades->id) }}" class="trade-sidebar__item" {{ $trades->id === $trade->id ? 'is-active' : '' }}">
-
-            <div class="trade-sidebar__info">
-                <p class="trade-sidebar__name">{{ $trades->sell->name }}</p>
-            </div>
-        </a>
-        @endforeach
-        <div class="sidebar-message">
-            @if(($trades->messages_count ?? 0) > 0)
-            < class="badge badge-message">{{ $trades->messages_count }}件</
-                @endif
+                <div class="trade-sidebar__info">
+                    <p class="trade-sidebar__name">{{ $trades->sell->name }}</p>
                 </div>
-    </aside>
-</div>
+            </a>
+            @endforeach
+            <div class="sidebar-message">
+                @if(($trades->messages_count ?? 0) > 0)
+                < class="badge badge-message">{{ $trades->messages_count }}件</
+                    @endif
+                    </div>
+        </aside>
+    </div>
 
-@if(!empty($shouldOpenCompleteModal) && $shouldOpenCompleteModal)
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const d = document.getElementById('sellerReviewModal');
-        if (d) d.showModal();
-        initReviewStars('sellerReviewModal', 'sellerReviewScore');
-    });
-</script>
-@endif
+    @if(!empty($shouldOpenCompleteModal) && $shouldOpenCompleteModal)
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const d = document.getElementById('sellerReviewModal');
+            if (d) d.showModal();
+            initReviewStars('sellerReviewModal', 'sellerReviewScore');
+        });
+    </script>
+    @endif
 
 
-@endsection
+    @endsection
