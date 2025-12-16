@@ -45,7 +45,13 @@ class ProfileController extends Controller
                 ->get();
         }
 
-        $tradeMessageCount = $items->sum('messages_count');
+        $tradeMessageCount = Trade::where('status', 'active')
+            ->whereHas('sell', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->withCount('messages')
+            ->get()
+            ->sum('messages_count');
 
         $reviewCount = Review::where('to_user_id', $profile->id)->count();
 
