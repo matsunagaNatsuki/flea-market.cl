@@ -45,7 +45,7 @@
                 src="{{ optional($trade->buyerProfile)->image ? asset('storage/' . optional($trade->buyerProfile)->image) : asset('images/cat_default_avatar.png') }}"
                 alt="{{ optional($trade->buyerProfile)->name }}">
         </div>
-        <h1>「{{ $trade->buyerProfile->name }}」 さんとの取引画面</h1>
+        <h1>「{{ $trade->sellerProfile->name }}」 さんとの取引画面</h1>
         <button type="button" class="trade-finish-btn"
             onclick="document.getElementById('reviewModal').showModal()">
             取引を完了する

@@ -270,6 +270,7 @@ body {
 
 .review-modal__inner {
     padding: 18px 20px 16px;
+    background-color: lightyellow;
 }
 
 .review-modal__title {

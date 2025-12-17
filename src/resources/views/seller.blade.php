@@ -24,7 +24,7 @@
 
                     @for($i=1; $i<=5; $i++)
                         <button type="button" class="review-star" data-value="{{ $i }}" aria-label="{{ $i }}点" aria-pressed="false">★</button>
-                        @endfor
+                    @endfor
                 </div>
             </div>
 

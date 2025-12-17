@@ -23,6 +23,7 @@ body {
     align-items: center;
     gap: 16px;
     margin-bottom: 24px;
+    
 }
 
 .seller-profile h1 {
@@ -39,7 +40,7 @@ body {
 
 #profile_preview {
     width: 100px;
-    height: auto;
+    height: 100px;
 }
 
 .trade-finish-btn{
