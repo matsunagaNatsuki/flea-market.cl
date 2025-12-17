@@ -81,6 +81,12 @@ body {
     margin: 14px 0;
 }
 
+.message__meta{
+    display: flex;
+    flex-direction: row;
+    margin: 14px 0;
+}
+
 .message .profile-image {
     width: 48px;
     height: 48px;
@@ -99,9 +105,10 @@ body {
 /* 名前 */
 .message strong {
     display: inline-block;
-    font-size: 14px;
-    font-weight: 800;
+    font-size: 20px;
     margin-bottom: 6px;
+    margin-left: 15px;
+    margin-top: 4px;
 }
 
 /* 吹き出し */

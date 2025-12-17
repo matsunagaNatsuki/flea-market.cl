@@ -130,18 +130,13 @@
         <aside class="trade-sidebar">
             <h3 class="trade-sidebar__title">その他の取引
             @foreach($sidebarTrades as $trades)
-            <a href="{{ route('get.seller', $trades->id) }}" class="trade-sidebar__item" {{ $trades->id === $trade->id ? 'is-active' : '' }}">
+            <a href="{{ route('get.seller', $trades->id) }}" class="trade-sidebar__item {{ $trades->id === $trade->id ? 'is-active' : '' }}">
 
                 <div class="trade-sidebar__info">
                     <p class="trade-sidebar__name">{{ $trades->sell->name }}</p>
                 </div>
             </a>
             @endforeach
-            <div class="sidebar-message">
-                @if(($trades->messages_count ?? 0) > 0)
-                < class="badge badge-message">{{ $trades->messages_count }}件</
-                    @endif
-                    </div>
         </aside>
     </div>
 
