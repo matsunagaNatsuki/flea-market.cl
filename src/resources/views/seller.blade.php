@@ -60,46 +60,46 @@
     <div class="border"></div>
 
     <div class="chat-box">
-        @foreach($trade->messages as $message)
-        @php
-        $isMe = ($message->user_id === auth()->id());
-        @endphp
+        @foreach($trade->messages->sortBy('created_at') as $message)
+            @php
+                $isMe = ($message->user_id === auth()->id());
+            @endphp
 
-        <div class="message {{ $isMe ? 'message--me' : 'message--other' }}">
-            <div class="message__meta">
-                <div class="profile-image">
-                    <img src="{{ optional($message->user->profile)->image ? asset('storage/' . optional($message->user->profile)->image) : asset('images/cat_default_avatar.png') }}"
-                        alt="{{ optional($message->user->profile)->name }}">
+            <div class="message {{ $isMe ? 'message--me' : 'message--other' }}">
+                <div class="message__meta">
+                    <div class="profile-image">
+                        <img src="{{ optional($message->user->profile)->image ? asset('storage/' . optional($message->user->profile)->image) : asset('images/cat_default_avatar.png') }}"
+                            alt="{{ optional($message->user->profile)->name }}">
+                    </div>
+                    <strong class="message__name">{{ $message->user->profile->name }}</strong>
                 </div>
-                <strong class="message__name">{{ $message->user->profile->name }}</strong>
+
+                <div class="message__content">
+                    <p class="message__bubble">{{ $message->body }}</p>
+
+                    @if($message->image)
+                    <img class="message__img" src="{{ asset('storage/' . $message->image) }}" alt="添付画像">
+                    @endif
+                    <small class="message__time">{{ $message->created_at->format('Y/m/d H:i') }}</small>
+
+                    @if($isMe)
+                        <div class="message__actions">
+                            <form action="{{ route('chat.destroy', $message->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                            </form>
+                            <form action="{{ route('chat.update', $message->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
+                                <button type="submit" class="btn btn-primary mt-2">更新</button>
+                            </form>
+                        </div>
+                    @endif
             </div>
-
-            <div class="message__content">
-                <p class="message__bubble">{{ $message->body }}</p>
-
-                @if($message->image)
-                <img class="message__img" src="{{ asset('storage/' . $message->image) }}" alt="添付画像">
-                @endif
-                <small class="message__time">{{ $message->created_at->format('Y/m/d H:i') }}</small>
-
-                @if($isMe)
-                <div class="message__actions">
-                    <form action="{{ route('chat.destroy', $message->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">削除</button>
-                    </form>
-                    <form action="{{ route('chat.update', $message->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
-                        <button type="submit" class="btn btn-primary mt-2">更新</button>
-                    </form>
-                </div>
-                @endif
-            </div>
-            @endforeach
-        </div>
+        @endforeach
+    </div>
 
         <form action="{{ url('/chat/seller/' . $trade->id) }}" method="POST" enctype="multipart/form-data" class="message-form" novalidate>
             @csrf

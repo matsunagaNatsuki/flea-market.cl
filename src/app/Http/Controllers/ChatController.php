@@ -22,12 +22,13 @@ class ChatController extends Controller
         $trade = Trade::where('id', $tradeId)
             ->where('seller_profile_id', $profile->id)
             ->with(['sell.user', 'messages.user'])
+            ->latest('updated_at')
             ->firstOrFail();
 
         $sidebarTrades = Trade::whereIn('status', ['active', 'completed'])
             ->where('seller_profile_id', $profile->id)
             ->with('sell')
-            ->latest('updated_at')
+            ->oldest('updated_at')
             ->get();
 
         $sell = Sell::with('user')->findOrFail($trade->sell_id);
