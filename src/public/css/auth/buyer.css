@@ -372,18 +372,15 @@ label.image-btn {
 @media screen and (min-width: 1400px) and (max-width: 1540px) {
     .container {
         margin-left: 240px;
-        /* サイドバー幅に合わせて少し縮める */
         padding: 20px 28px 100px;
     }
 
     .trade-sidebar {
         width: 240px;
-        /* サイドバーを少し狭く */
     }
 
     .product-box {
         grid-template-columns: 200px 1fr;
-        /* 商品画像を少し縮小 */
     }
 
     .product-box img.custom-img,
@@ -394,7 +391,6 @@ label.image-btn {
 
     .seller-profile h1 {
         font-size: 36px;
-        /* 見出しを少し小さく */
     }
 }
 
@@ -402,18 +398,15 @@ label.image-btn {
 @media screen and (min-width: 768px) and (max-width: 850px) {
     .container {
         margin-left: 200px;
-        /* サイドバー幅を縮める */
         padding: 16px 20px 80px;
     }
 
     .trade-sidebar {
         width: 200px;
-        /* サイドバーをコンパクトに */
     }
 
     .product-box {
         grid-template-columns: 160px 1fr;
-        /* 商品画像をさらに縮小 */
         gap: 12px;
     }
 
@@ -425,12 +418,10 @@ label.image-btn {
 
     .seller-profile h1 {
         font-size: 28px;
-        /* 見出しをさらに小さく */
     }
 
     .message strong {
         font-size: 16px;
-        /* 名前表示を少し小さく */
     }
 
     .trade-finish-btn{
