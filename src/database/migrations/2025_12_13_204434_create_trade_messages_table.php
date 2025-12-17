@@ -26,7 +26,6 @@ class CreateTradeMessagesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('trade_id')->references('id')->on('trades')->onDelete('cascade');
         });
-
     }
 
     /**

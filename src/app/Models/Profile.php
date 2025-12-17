@@ -21,7 +21,7 @@ class Profile extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id')->withTimestamps();
+        return $this->hasOne(User::class, 'user_id')->withTimestamps();
     }
 
     // 他の人を評価したレビュー
