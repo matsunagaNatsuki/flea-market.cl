@@ -50,16 +50,16 @@ php artisan storage:link
 
 ## ユーザーデータ
   id1: 一般ユーザー1
-  email: general1@gmail.com
-  password: password
+
+  email: general1@gmail.com/ password: password
 
   id2: 一般ユーザー2
-  email: general2@gmail.com
-  password: password
+
+  email: general2@gmail.com/ password: password
 
   id3: 松永 菜月
-  email: test@gmail.com
-  password: password
+
+  email: test@gmail.com/ password: password
 
 ## 使用技術（実行環境）
 - php8.3.0
