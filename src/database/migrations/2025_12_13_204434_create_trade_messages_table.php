@@ -19,6 +19,8 @@ class CreateTradeMessagesTable extends Migration
             $table->unsignedBigInteger('trade_id');
             $table->string('body', 400);
             $table->string('image', 255)->nullable();
+            $table->boolean('read_by_seller')->default(false);
+            $table->boolean('read_by_buyer')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
