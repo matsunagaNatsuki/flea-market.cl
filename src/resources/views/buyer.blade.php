@@ -9,7 +9,6 @@
 @section('content')
 <div class="container">
 
-
     <!-- 取引開始ボタンを押下するとメールが送信され評価モーダルが表示されます -->
     <dialog id="reviewModal" class="review-modal">
         <form method="POST" action="{{ route('buyer.review', $trade->id) }}" class="review-modal__inner">
@@ -119,6 +118,7 @@
                 </ul>
             </div>
             @endif
+            
             <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control" placeholder="取引メッセージを入力してください">{{ old('body','') }}</textarea>
 
 

@@ -23,7 +23,6 @@ body {
     align-items: center;
     gap: 16px;
     margin-bottom: 24px;
-    
 }
 
 .seller-profile h1 {
@@ -99,9 +98,9 @@ body {
     padding: 20px 0 0;
 }
 
-.message {
+.message__meta{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     margin: 14px 0;
 }
 
@@ -123,9 +122,10 @@ body {
 /* 名前 */
 .message strong {
     display: inline-block;
-    font-size: 14px;
-    font-weight: 800;
+    font-size: 20px;
     margin-bottom: 6px;
+    margin-left: 15px;
+    margin-top: 4px;
 }
 
 /* 吹き出し */
@@ -366,4 +366,78 @@ label.image-btn {
     font-weight: 700;
     height: 40px;
     margin-top: -10px;
+}
+
+/* 1400px〜1540pxのレスポンシブ対応 */
+@media screen and (min-width: 1400px) and (max-width: 1540px) {
+    .container {
+        margin-left: 240px;
+        /* サイドバー幅に合わせて少し縮める */
+        padding: 20px 28px 100px;
+    }
+
+    .trade-sidebar {
+        width: 240px;
+        /* サイドバーを少し狭く */
+    }
+
+    .product-box {
+        grid-template-columns: 200px 1fr;
+        /* 商品画像を少し縮小 */
+    }
+
+    .product-box img.custom-img,
+    .product-box img.card-img-top {
+        width: 200px;
+        height: 130px;
+    }
+
+    .seller-profile h1 {
+        font-size: 36px;
+        /* 見出しを少し小さく */
+    }
+}
+
+/* 768px〜850pxのレスポンシブ対応 */
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .container {
+        margin-left: 200px;
+        /* サイドバー幅を縮める */
+        padding: 16px 20px 80px;
+    }
+
+    .trade-sidebar {
+        width: 200px;
+        /* サイドバーをコンパクトに */
+    }
+
+    .product-box {
+        grid-template-columns: 160px 1fr;
+        /* 商品画像をさらに縮小 */
+        gap: 12px;
+    }
+
+    .product-box img.custom-img,
+    .product-box img.card-img-top {
+        width: 160px;
+        height: 110px;
+    }
+
+    .seller-profile h1 {
+        font-size: 28px;
+        /* 見出しをさらに小さく */
+    }
+
+    .message strong {
+        font-size: 16px;
+        /* 名前表示を少し小さく */
+    }
+
+    .trade-finish-btn{
+        font-size: 10px;
+        right: 100px;
+        top: 150px;
+    }
+
+    
 }
