@@ -109,7 +109,7 @@ body {
     height: 48px;
     border-radius: 999px;
     overflow: hidden;
-    background: #d9d9d9;
+    background: none;
 }
 
 .message .profile-image img {
@@ -166,18 +166,17 @@ body {
 .message .btn {
     font-size: 12px;
     padding: 4px 10px;
-    border: 1px solid #999;
-    background: #fff;
-    border-radius: 4px;
+    color: #333;
+    background: none;
+        border: none;
     cursor: pointer;
 }
 
 .message .btn-danger {
-    color: #666;
-}
-
-.message .btn-primary {
-    color: #333;
+    color: grey;
+    background: none;
+    border: none;
+    font-size: 11px;
 }
 
 .message-form {

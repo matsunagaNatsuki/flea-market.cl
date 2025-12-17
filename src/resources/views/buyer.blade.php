@@ -95,12 +95,36 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">削除</button>
                     </form>
-                    <form action="{{ route('chat.update', $message->id) }}" method="POST">
+                    <button type="button" class="btn edit-toggle">編集</button>
+                    <form action="{{ route('chat.update', $message->id) }}" method="POST" class="edit-form" style="display:none;">
                         @csrf
                         @method('PUT')
                         <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
                         <button type="submit" class="btn btn-primary mt-2">更新</button>
+                        <button type="button" class="btn cancel-edit">キャンセル</button>
                     </form>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.querySelectorAll('.edit-toggle').forEach(function(button) {
+                                button.addEventListener('click', function() {
+                                    const form = this.parentElement.querySelector('.edit-form');
+                                    form.style.display = 'block';
+                                    this.style.display = 'none';
+                                });
+                            });
+
+                            document.querySelectorAll('.cancel-edit').forEach(function(button) {
+                                button.addEventListener('click', function() {
+                                    const form = this.closest('.edit-form');
+                                    const editButton = form.parentElement.querySelector('.edit-toggle');
+                                    form.style.display = 'none';
+                                    editButton.style.display = 'inline-block';
+                                });
+                            });
+                        });
+                    </script>
+
                 </div>
                 @endif
             </div>
