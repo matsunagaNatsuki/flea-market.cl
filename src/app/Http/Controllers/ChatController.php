@@ -28,7 +28,7 @@ class ChatController extends Controller
         $sidebarTrades = Trade::whereIn('status', ['active', 'completed'])
             ->where('seller_profile_id', $profile->id)
             ->with('sell')
-            ->oldest('updated_at')
+            ->latest('updated_at')
             ->get();
 
         $sell = Sell::with('user')->findOrFail($trade->sell_id);
