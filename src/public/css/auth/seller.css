@@ -92,7 +92,7 @@ body {
     height: 48px;
     border-radius: 999px;
     overflow: hidden;
-    background: #d9d9d9;
+    background: none
 }
 
 .message .profile-image img {

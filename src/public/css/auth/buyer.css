@@ -391,6 +391,12 @@ label.image-btn {
     .seller-profile h1 {
         font-size: 36px;
     }
+
+    .trade-finish-btn {
+        font-size: 18px;
+        right: 100px;
+        top: 140px;
+    }
 }
 
 /* 768px〜850pxのレスポンシブ対応 */
@@ -428,6 +434,4 @@ label.image-btn {
         right: 100px;
         top: 150px;
     }
-
-    
 }
