@@ -168,14 +168,14 @@ body {
     left: 280px;
     right: 0;
     bottom: 0;
-    background: #fff;
-    border-top: 2px solid #777;
-    padding: 14px 28px;
+    background: none;
+    padding: 14px 20px;
     display: grid;
     grid-template-columns: 1fr auto auto;
     gap: 12px;
     align-items: center;
     z-index: 10;
+    align-items: flex-end;
 }
 
 /* 入力欄 */
@@ -191,7 +191,7 @@ body {
 
 /* ファイル */
 .message-form input[type="file"].form-control {
-    width: 100%;
+    width: 150px;
     border: 2px solid #e26b6b;
     color: #e26b6b;
     background: #fff;
@@ -200,13 +200,12 @@ body {
     cursor: pointer;
 }
 
-/* 送信ボタン（紙飛行機っぽい） */
+/* 送信ボタン */
 .message-form button[type="submit"] {
     width: 52px;
     height: 44px;
-    border: 2px solid #777;
-    border-radius: 8px;
-    background: #fff;
+    background: none;
+    border: none;
     cursor: pointer;
     font-size: 14px;
 }
@@ -254,7 +253,7 @@ body {
     border-radius: 4px;
     padding: 10px 10px;
     border: 1px solid #cfcfcf;
-    }
+}
 
 .trade-sidebar__name {
     margin: 0;
@@ -342,14 +341,14 @@ body {
 }
 
 label.image-btn {
-    width: 115px;
+    width: 110px;
+    height: 48px;
     display: inline-block;
-    padding: 8px 12px;
+    padding: 10px 12px;
     border: 2px solid red;
     color: red !important;
-    border-radius : 4px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 700;
-    height: 40px;
-    margin-top: -10px;
+    margin-top: -3px;
 }

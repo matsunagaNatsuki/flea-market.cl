@@ -14,7 +14,7 @@
         <form method="POST" action="{{ route('buyer.review', $trade->id) }}" class="review-modal__inner">
             @csrf
             <div class="review-modal__header">
-                <h3 class="review-modal__title">取引を完了しました。</h3>
+                <h3 class="review-modal__title">取引が完了しました。</h3>
             </div>
 
             <div class="review-modal__body">
