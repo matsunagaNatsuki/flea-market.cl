@@ -67,88 +67,92 @@
 
     <div class="chat-box">
         @foreach($trade->messages as $message)
-            @php
-                $isMe = ($message->user_id === auth()->id());
-            @endphp
+        @php
+        $isMe = ($message->user_id === auth()->id());
+        @endphp
 
-            <div class="message {{ $isMe ? 'message--me' : 'message--other' }}">
-                <div class="message__meta">
-                    <div class="profile-image">
-                        <img src="{{ optional($message->user->profile)->image ? asset('storage/' . optional($message->user->profile)->image) : asset('images/cat_default_avatar.png') }}"
-                            alt="{{ optional($message->user->profile)->name }}">
-                    </div>
-                    <strong class="message__name">{{ $message->user->profile->name }}</strong>
+        <div class="message {{ $isMe ? 'message--me' : 'message--other' }}">
+            <div class="message__meta">
+                <div class="profile-image">
+                    <img src="{{ optional($message->user->profile)->image ? asset('storage/' . optional($message->user->profile)->image) : asset('images/cat_default_avatar.png') }}"
+                        alt="{{ optional($message->user->profile)->name }}">
                 </div>
-
-                <div class="message__content">
-                    <p class="message__bubble">{{ $message->body }}</p>
-
-                    @if($message->image)
-                    <img class="message__img" src="{{ asset('storage/' . $message->image) }}" alt="添付画像">
-                    @endif
-                    <small class="message__time">{{ $message->created_at->format('Y/m/d H:i') }}</small>
-
-                    @if($isMe)
-                        <div class="message__actions">
-                            <form action="{{ route('chat.destroy', $message->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">削除</button>
-                            </form>
-                            <button type="button" class="btn edit-toggle">編集</button>
-                            <form action="{{ route('chat.update', $message->id) }}" method="POST" class="edit-form" style="display:none;">
-                                @csrf
-                                @method('PUT')
-                                <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
-                                <button type="submit" class="btn btn-primary mt-2">更新</button>
-                                <button type="button" class="btn cancel-edit">キャンセル</button>
-                            </form>
-
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function() {
-                                    document.querySelectorAll('.edit-toggle').forEach(function(button) {
-                                        button.addEventListener('click', function() {
-                                            const form = this.parentElement.querySelector('.edit-form');
-                                            form.style.display = 'block';
-                                            this.style.display = 'none';
-                                        });
-                                    });
-
-                                    document.querySelectorAll('.cancel-edit').forEach(function(button) {
-                                        button.addEventListener('click', function() {
-                                            const form = this.closest('.edit-form');
-                                            const editButton = form.parentElement.querySelector('.edit-toggle');
-                                            form.style.display = 'none';
-                                            editButton.style.display = 'inline-block';
-                                        });
-                                    });
-                                });
-                            </script>
-                        </div>
-                    @endif
-                </div>
+                <strong class="message__name">{{ $message->user->profile->name }}</strong>
             </div>
+
+            <div class="message__content">
+                <p class="message__bubble">{{ $message->body }}</p>
+
+                @if($message->image)
+                <img class="message__img" src="{{ asset('storage/' . $message->image) }}" alt="添付画像">
+                @endif
+                <small class="message__time">{{ $message->created_at->format('Y/m/d H:i') }}</small>
+
+                @if($isMe)
+                <div class="message__actions">
+                    <form action="{{ route('chat.destroy', $message->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                    </form>
+                    <button type="button" class="btn edit-toggle">編集</button>
+                    <form action="{{ route('chat.update', $message->id) }}" method="POST" class="edit-form" style="display:none;">
+                        @csrf
+                        @method('PUT')
+                        <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
+                        <button type="submit" class="btn btn-primary mt-2">更新</button>
+                        <button type="button" class="btn cancel-edit">キャンセル</button>
+                    </form>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.querySelectorAll('.edit-toggle').forEach(function(button) {
+                                button.addEventListener('click', function() {
+                                    const form = this.parentElement.querySelector('.edit-form');
+                                    form.style.display = 'block';
+                                    this.style.display = 'none';
+                                });
+                            });
+
+                            document.querySelectorAll('.cancel-edit').forEach(function(button) {
+                                button.addEventListener('click', function() {
+                                    const form = this.closest('.edit-form');
+                                    const editButton = form.parentElement.querySelector('.edit-toggle');
+                                    form.style.display = 'none';
+                                    editButton.style.display = 'inline-block';
+                                });
+                            });
+                        });
+                    </script>
+                </div>
+                @endif
+            </div>
+        </div>
         @endforeach
 
         <form action="{{ url('/chat/buyer/' . $trade->id) }}" method="POST" enctype="multipart/form-data" class="message-form" novalidate>
             @csrf
-            @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+            <div class="message-input">
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control" placeholder="取引メッセージを入力してください">{{ old('body','') }}</textarea>
             </div>
-            @endif
-            <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control" placeholder="取引メッセージを入力してください">{{ old('body','') }}</textarea>
 
 
             <input type="file" id="image" name="image" style="display:none;">
             <label for="image" class="image-btn">画像を追加</label>
 
-            <button type="submit" class="btn btn-primary mt-2">
-                <i class="fas fa-paper-plane"></i>送信</button>
+            <button type="submit" class="btn btn-primary btn-icon">
+                <img src="http://localhost/images/paper-airplane.png" alt="送信" width="35" height="35">
+            </button>
+
         </form>
         <script src="{{ asset('js/chat.js') }}"></script>
     </div>

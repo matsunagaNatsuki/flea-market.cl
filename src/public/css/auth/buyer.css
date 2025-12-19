@@ -54,8 +54,6 @@ body {
 
 }
 
-
-/* 商品情報ブロック（画像＋商品名＋価格） */
 .product-box {
     display: grid;
     grid-template-columns: 220px 1fr;
@@ -185,19 +183,19 @@ body {
     right: 0;
     bottom: 0;
     background: #fff;
-    border-top: 2px solid #777;
-    padding: 14px 28px;
+    padding: 14px 20px;
     display: grid;
     grid-template-columns: 1fr auto auto;
     gap: 12px;
     align-items: center;
     z-index: 10;
+    align-items: flex-end;
 }
 
 /* 入力欄 */
 .message-form textarea.form-control {
-    width: 80%;
-    height: 44px;
+    width: 100%;
+    height: 45px;
     resize: none;
     border: 2px solid #777;
     border-radius: 4px;
@@ -219,9 +217,7 @@ body {
 .message-form button[type="submit"] {
     width: 52px;
     height: 44px;
-    border: 2px solid #777;
-    border-radius: 8px;
-    background: #fff;
+    background: none;
     cursor: pointer;
     font-size: 14px;
 }
@@ -355,17 +351,29 @@ body {
 }
 
 label.image-btn {
-    width: 115px;
+    width: 110px;
+    height: 50px;
     display: inline-block;
-    padding: 8px 12px;
+    padding: 10px 12px;
     border: 2px solid red;
     color: red !important;
     border-radius: 4px;
     cursor: pointer;
     font-weight: 700;
-    height: 40px;
-    margin-top: -10px;
 }
+
+.btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    outline: none;
+}
+
+
 
 /* 1400px〜1540pxのレスポンシブ対応 */
 @media screen and (min-width: 1400px) and (max-width: 1540px) {
@@ -396,6 +404,18 @@ label.image-btn {
         font-size: 18px;
         right: 100px;
         top: 140px;
+    }
+
+    .message-form textarea.form-control {
+        width: 100%;
+        height: 44px;
+        resize: none;
+        border: 2px solid #777;
+        border-radius: 4px;
+        padding: 10px 12px;
+        font-size: 14px;
+        display: flex;
+        gap: 8px;
     }
 }
 
@@ -433,5 +453,42 @@ label.image-btn {
         font-size: 10px;
         right: 100px;
         top: 150px;
+    }
+
+    .message-form  {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+        background: none;
+    }
+
+    textarea {
+        flex: 1;
+        min-width:0;
+    }
+
+    #chat-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .message-form button {
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+    }
+
+    .message-input {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        }
+
+    .alert-danger {
+        margin: 0;
+        padding: 4px 8px;
+        font-size: 0.9em;
     }
 }
