@@ -138,9 +138,6 @@ body {
 
 /* 吹き出し */
 .message__bubble {
-    display: inline-block;
-    max-width: min(520px, 70%);
-    min-width: 100px;
     padding: 8px 12px;
     background: #d9d9d9;
     border-radius: 6px;

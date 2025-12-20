@@ -59,8 +59,10 @@
         @else
         <img src="{{ Storage::url($trade->sell->image) }}" class="card-img-top img-fluid custom-img" alt="{{ $trade->sell->name }}">
         @endif
-        <h3>{{ $trade->sell->name }}</h3>
-        <p>価格：¥{{ number_format($trade->sell->price) }}</p>
+        <div class="product-info">
+            <h3>{{ $trade->sell->name }}</h3>
+            <p>¥{{ number_format($trade->sell->price) }}</p>
+        </div>
     </div>
 
     <div class="border"></div>
@@ -86,22 +88,23 @@
                 @if($message->image)
                 <img class="message__img" src="{{ asset('storage/' . $message->image) }}" alt="添付画像">
                 @endif
-                <small class="message__time">{{ $message->created_at->format('Y/m/d H:i') }}</small>
 
                 @if($isMe)
                 <div class="message__actions">
-                    <form action="{{ route('chat.destroy', $message->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">削除</button>
-                    </form>
                     <button type="button" class="btn edit-toggle">編集</button>
                     <form action="{{ route('chat.update', $message->id) }}" method="POST" class="edit-form" style="display:none;">
                         @csrf
                         @method('PUT')
                         <textarea name="body" rows="3" class="form-control">{{ old('body', $message->body) }}</textarea>
-                        <button type="submit" class="btn btn-primary mt-2">更新</button>
-                        <button type="button" class="btn cancel-edit">キャンセル</button>
+                        <div class="edit-form-buttons">
+                            <button type="submit" class="btn btn-primary mt-2">更新</button>
+                            <button type="button" class="btn cancel-edit">キャンセル</button>
+                        </div>
+                    </form>
+                    <form action="{{ route('chat.destroy', $message->id) }}" method="POST" class="delete-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-delete btn-sm">削除</button>
                     </form>
 
                     <script>
@@ -149,7 +152,7 @@
             <input type="file" id="image" name="image" style="display:none;">
             <label for="image" class="image-btn">画像を追加</label>
 
-            <button type="submit" class="btn btn-primary btn-icon">
+            <button type="submit" class="btn btn-primary mt-2">
                 <img src="http://localhost/images/paper-airplane.png" alt="送信" width="35" height="35">
             </button>
 
