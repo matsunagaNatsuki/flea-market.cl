@@ -43,10 +43,16 @@ body {
     margin: 0 0 18px;
 }
 
+.product-info h3 {
+    font-size: 32px;
+    font-weight: 900;
+    margin: 0 0 8px;
+}
+
 .product-box img.custom-img,
 .product-box img.card-img-top {
-    width: 220px;
-    height: 140px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     background: #dcdcdc;
     display: block;
@@ -58,9 +64,7 @@ body {
 }
 
 .product-box p {
-    margin: 0;
     font-size: 28px;
-    font-weight: 700;
 }
 
 .border {
@@ -78,13 +82,24 @@ body {
 .message {
     display: flex;
     flex-direction: column;
-    margin: 14px 0;
+    margin: 10px 0;
+    align-items: flex-start;
+    width: auto;
+}
+
+.message--me {
+    align-items: flex-end;
+    margin-right: 120px;
+}
+
+.message--me .message__meta {
+    flex-direction: row-reverse;
 }
 
 .message__meta{
     display: flex;
-    flex-direction: row;
-    margin: 14px 0;
+    flex-direction: center;
+    gap: 6px;
 }
 
 .message .profile-image {
@@ -105,23 +120,45 @@ body {
 /* 名前 */
 .message strong {
     display: inline-block;
-    font-size: 20px;
+    font-size: 12px;
     margin-bottom: 6px;
     margin-left: 15px;
-    margin-top: 4px;
+    margin-top: 15px;
+}
+
+.message__content {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.message--me .message__content {
+    align-items: flex-end;
 }
 
 /* 吹き出し */
-.message p {
-    margin: 0;
-    padding: 14px 16px;
+.message__bubble {
+    display: inline-block;
+    max-width: min(520px, 70%);
+    min-width: 100px;
+    padding: 8px 12px;
     background: #d9d9d9;
     border-radius: 6px;
-    width: fit-content;
-    max-width: min(520px, 70%);
     font-size: 14px;
     font-weight: 700;
+    overflow-wrap: break-word;
+    text-align: left;
+    white-space: normal;
 }
+
+.short-message {
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+    text-align: right;
+    padding-right: 18px;
+}
+
 
 /* 添付画像 */
 .message img[alt="添付画像"] {
@@ -132,21 +169,24 @@ body {
     display: block;
 }
 
-/* 日時 */
-.message small {
-    display: block;
-    margin-top: 8px;
-    font-size: 12px;
-    color: #666;
-}
-
 /* 編集・削除ボタン（画像の右下っぽい位置） */
 .message form {
     display: inline-block;
     margin-top: 6px;
 }
 
-.message .btn {
+.message__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: -10px;
+}
+
+/* 自分のメッセージだけ反転 */
+.message--me .message__actions {
+    flex-direction: row-reverse;
+}
+
+.btn-delete{
     font-size: 10px;
     padding: 4px 10px;
     color: grey;
@@ -161,6 +201,16 @@ body {
     color: #333;
     padding: 0;
     font-size: 11px;
+    margin-top: 5px;
+}
+
+.btn.cancel-edit {
+    border: none;
+    background: none;
+    color: grey;
+    padding: 0;
+    font-size: 11px;
+    margin-top: 5px;
 }
 
 .message-form {
@@ -168,7 +218,7 @@ body {
     left: 280px;
     right: 0;
     bottom: 0;
-    background: none;
+    background: #fff;
     padding: 14px 20px;
     display: grid;
     grid-template-columns: 1fr auto auto;
@@ -189,15 +239,17 @@ body {
     font-size: 14px;
 }
 
-/* ファイル */
-.message-form input[type="file"].form-control {
-    width: 150px;
-    border: 2px solid #e26b6b;
-    color: #e26b6b;
-    background: #fff;
-    border-radius: 6px;
-    font-weight: 800;
+label.image-btn {
+    width: 110px;
+    height: 48px;
+    display: inline-block;
+    padding: 10px 12px;
+    border: 2px solid red;
+    color: red !important;
+    border-radius: 4px;
     cursor: pointer;
+    font-weight: 700;
+    margin-top: -3px;
 }
 
 /* 送信ボタン */
@@ -340,15 +392,17 @@ body {
     color: #fff;
 }
 
-label.image-btn {
-    width: 110px;
-    height: 48px;
-    display: inline-block;
-    padding: 10px 12px;
-    border: 2px solid red;
-    color: red !important;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 700;
-    margin-top: -3px;
+@media screen and (min-width: 768px) and (max-width: 850px) {
+
+    .buyer-profile h1 {
+        font-size: 21px;
+        margin: 0;
+    }
+
+    .message--me {
+        align-items: flex-end;
+        margin-right: 10px;
+    }
 }
+
+

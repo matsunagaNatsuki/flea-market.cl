@@ -53,8 +53,10 @@
         @else
         <img src="{{ Storage::url($trade->sell->image) }}" class="card-img-top img-fluid custom-img" alt="{{ $trade->sell->name }}">
         @endif
-        <h3>{{ $trade->sell->name }}</h3>
-        <p>価格：¥{{ number_format($trade->sell->price) }}</p>
+        <div class="product-info">
+            <h3>{{ $trade->sell->name }}</h3>
+            <p>¥{{ number_format($trade->sell->price) }}</p>
+        </div>
     </div>
 
     <div class="border"></div>
@@ -75,19 +77,21 @@
             </div>
 
             <div class="message__content">
-                <p class="message__bubble">{{ $message->body }}</p>
+                <p class="message__bubble {{ mb_strlen($message->body) <= 4 ? 'short-message' : '' }}">
+                    {{ $message->body }}
+                </p>
+
 
                 @if($message->image)
                 <img class="message__img" src="{{ asset('storage/' . $message->image) }}" alt="添付画像">
                 @endif
-                <small class="message__time">{{ $message->created_at->format('Y/m/d H:i') }}</small>
 
                 @if($isMe)
                 <div class="message__actions">
                     <form action="{{ route('chat.destroy', $message->id) }}" method="POST" class="delete-form">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                        <button type="submit" class="btn btn-delete btn-sm">削除</button>
                     </form>
                     <button type="button" class="btn btn-primary btn-sm edit-toggle">編集</button>
                     <form action="{{ route('chat.update', $message->id) }}" method="POST" class="edit-form" style="display:none;">
