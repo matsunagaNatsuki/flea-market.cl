@@ -31,12 +31,13 @@ class ProfileController extends Controller
                 ->with('sell')
                 ->withCount('messages')
                 ->withCount([
-                    'messages as unread_count' => function ($q) {
-                        $q->where('read_by_seller', false)
-                            ->where('user_id', '!=', auth()->id());
+                    'messages as unread_count' => function ($query) {
+                        $query->where('read_by_seller', false)
+                            ->whereColumn('user_id', '!=', 'trades.seller_profile_id');
                     }
                 ])
-                ->latest('updated_at')
+                ->withMax('messages', 'created_at')
+                ->orderByDesc('messages_max_created_at')
                 ->get();
         } else {
             $page = 'sell';
@@ -49,9 +50,14 @@ class ProfileController extends Controller
             ->whereHas('sell', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
-            ->withCount('messages')
+            ->withCount([
+            'messages as unread_count' => function ($query) {
+                $query->where('read_by_seller', false)
+                      ->whereColumn('user_id', '!=', 'trades.seller_profile_id');
+                }
+            ])
             ->get()
-            ->sum('messages_count');
+            ->sum('unread_count');
 
         $reviewCount = Review::where('to_user_id', $profile->id)->count();
 
