@@ -131,6 +131,49 @@ class ProfileController extends Controller
 
         return redirect()->route('get.buyer', $trade->id);
     }
+
+    // tradeタブの未読件数のカウント
+    public function unreadCount()
+    {
+        $user = Auth::user();
+        $profile = Profile::where('user_id', $user->id)->firstOrFail();
+
+        $count = Trade::where('status', 'active')
+            ->where('seller_profile_id', $profile->id)
+            ->withCount([
+                'messages as unread_count' => function ($query) {
+                    $query->where('read_by_seller', false)
+                        ->whereColumn('user_id', '!=', 'trades.seller_profile_id');
+                }
+            ])
+            ->get()
+            ->sum('unread_count');
+
+        return response()->json(['count' => (int)$count]);
+    }
+
+    // 商品画像の未読件数のカウント
+    public function unreadCountTrades()
+    {
+        $user = Auth::user();
+        $profile = Profile::where('user_id', $user->id)->firstOrFail();
+
+        $trades = Trade::where('status', 'active')
+            ->where('seller_profile_id', $profile->id)
+            ->withCount([
+                'messages as unread_count' => function ($query) {
+                    $query->where('read_by_seller', false)
+                        ->whereColumn('user_id', '!=', 'trades.seller_profile_id');
+                }
+            ])
+            ->get(['id']);
+
+        $map = $trades->pluck('unread_count', 'id');
+
+        return response()->json([
+            'counts' => $map
+        ]);
+    }
 }
 
 

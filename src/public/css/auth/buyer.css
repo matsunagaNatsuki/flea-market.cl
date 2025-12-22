@@ -521,10 +521,11 @@ label.image-btn {
     .message-input {
         flex: 1;
         min-width: 0;
+        height:50px;
         display: flex;
         flex-direction: column;
         gap: 4px;
-        }
+    }
 
     .alert-danger {
         margin: 0;

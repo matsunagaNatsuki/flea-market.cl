@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Trade;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatController;
@@ -47,6 +48,14 @@ Route::middleware(['auth', 'verified',])->group(function () {
     // 購入者用の評価レビュー
     Route::post('/buyer/{tradeId}/review', [ChatController::class, 'buyerReview'])->name('buyer.review');
 });
+
+    // tradeタブの未読件数の表示
+Route::get('/unread-count', [ProfileController::class, 'unreadCount'])->middleware('auth');
+    // 商品画像の未読件数の表示
+Route::get('/unread-count/trades', [ProfileController::class, 'unreadCountTrades'])->middleware('auth');
+
+
+
 
 Route::post('/login', [LoginController::class, 'store']);
 
