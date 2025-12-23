@@ -24,16 +24,25 @@ class ProfileController extends Controller
                 ->latest()
                 ->get();
         } elseif ($page === 'trade') {
+
+            $profile = Profile::where('user_id', $user->id)->firstOrFail();
+
             $items = Trade::where('status', 'active')
-                ->whereHas('sell', function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
+                ->where(function ($query) use ($profile) {
+                    $query->where('seller_profile_id', $profile->id)
+                        ->orWhere('buyer_profile_id', $profile->id);
                 })
                 ->with('sell')
                 ->withCount('messages')
                 ->withCount([
-                    'messages as unread_count' => function ($query) {
-                        $query->where('read_by_seller', false)
-                            ->whereColumn('user_id', '!=', 'trades.seller_profile_id');
+                    'messages as unread_count' => function ($query) use ($profile) {
+                        $query->where(function ($query) use ($profile) {
+                            $query ->whereColumn('user_id', '!=', 'trades.seller_profile_id');
+                        })
+                            ->orWhere(function ($query) use ($profile) {
+                                $query->where('read_by_buyer', false)
+                                    ->whereColumn('user_id', '!=', 'trades.buyer_profile_id');
+                            });
                     }
                 ])
                 ->withMax('messages', 'created_at')
@@ -138,19 +147,33 @@ class ProfileController extends Controller
         $user = Auth::user();
         $profile = Profile::where('user_id', $user->id)->firstOrFail();
 
-        $count = Trade::where('status', 'active')
+        $sellerSum = Trade::where('status', 'active')
             ->where('seller_profile_id', $profile->id)
             ->withCount([
-                'messages as unread_count' => function ($query) {
-                    $query->where('read_by_seller', false)
-                        ->whereColumn('user_id', '!=', 'trades.seller_profile_id');
+                'messages as unread_count' => function ($q) {
+                    $q->where('read_by_seller', false)
+                        ->whereColumn('trade_messages.user_id', '!=', 'trades.seller_profile_id');
                 }
             ])
             ->get()
             ->sum('unread_count');
 
-        return response()->json(['count' => (int)$count]);
+        $buyerSum = Trade::where('status', 'active')
+            ->where('buyer_profile_id', $profile->id)
+            ->withCount([
+                'messages as unread_count' => function ($q) {
+                    $q->where('read_by_buyer', false)
+                        ->whereColumn('trade_messages.user_id', '!=', 'trades.buyer_profile_id');
+                }
+            ])
+            ->get()
+            ->sum('unread_count');
+
+        return response()->json([
+            'count' => $sellerSum + $buyerSum
+        ]);
     }
+
 
     // 商品画像の未読件数のカウント
     public function unreadCountTrades()
@@ -158,20 +181,32 @@ class ProfileController extends Controller
         $user = Auth::user();
         $profile = Profile::where('user_id', $user->id)->firstOrFail();
 
-        $trades = Trade::where('status', 'active')
+        $seller = Trade::where('status', 'active')
             ->where('seller_profile_id', $profile->id)
             ->withCount([
-                'messages as unread_count' => function ($query) {
-                    $query->where('read_by_seller', false)
-                        ->whereColumn('user_id', '!=', 'trades.seller_profile_id');
+                'messages as unread_count' => function ($q) {
+                    $q->where('read_by_seller', false)
+                        ->whereColumn('trade_messages.user_id', '!=', 'trades.seller_profile_id');
                 }
             ])
-            ->get(['id']);
+            ->get(['id'])
+            ->mapWithKeys(fn($t) => [$t->id => (int)$t->unread_count]);
 
-        $map = $trades->pluck('unread_count', 'id');
+        $buyer = Trade::where('status', 'active')
+            ->where('buyer_profile_id', $profile->id)
+            ->withCount([
+                'messages as unread_count' => function ($q) {
+                    $q->where('read_by_buyer', false)
+                        ->whereColumn('trade_messages.user_id', '!=', 'trades.buyer_profile_id');
+                }
+            ])
+            ->get(['id'])
+            ->mapWithKeys(fn($t) => [$t->id => (int)$t->unread_count]);
+
+        $counts = $seller->union($buyer);
 
         return response()->json([
-            'counts' => $map
+            'counts' => $counts
         ]);
     }
 }

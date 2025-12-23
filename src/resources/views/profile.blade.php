@@ -18,7 +18,7 @@
             <span class="profile-rating__stars" aria-label="評価 {{ $reviewAvg }} / 5">
                 @for($i=1; $i<=5; $i++)
                     <span class="{{ $i <= $reviewAvg ? 'is-on' : '' }}">★</span>
-                @endfor
+            @endfor
             </span>
         </div>
         @endif
@@ -81,77 +81,85 @@
     @if ($page === 'trade')
     <div class="items">
         @foreach ($items as $trade)
+
+        @php
+        $isSeller = $trade->seller_profile_id === $profile->id;
+        @endphp
+
         <div class="item">
-            <a href="{{ route('get.seller', $trade->id) }}">
+            <a href="{{ $isSeller ? route('get.seller', $trade->id) : route('get.buyer', $trade->id) }}">
                 <div class="item__img--container" data-trade-id="{{ $trade->id }}">
                     <img src="{{ $trade->sell->image }}" class="item__img" alt="商品画像">
-                    <span class="item__badge"
-                        style="{{ (($trade->unread_count ?? 0) > 0) ? '' : 'display:none;' }}">
+
+                    <span class="item__badge {{ ($trade->unread_count ?? 0) > 0 ? '' : 'is-hidden' }}">
                         {{ (int) ($trade->unread_count ?? 0) }}
                     </span>
                 </div>
+
                 <p class="item__name">{{ $trade->sell->name }}</p>
             </a>
         </div>
+
         @endforeach
     </div>
     @endif
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
 
-        const updateTotalBadge = () => {
-            return fetch('/unread-count', {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    cache: 'no-store'
-                })
-                .then(r => r.json())
-                .then(data => {
-                    const badge = document.querySelector('.count-badge');
-                    if (!badge) return;
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
 
-                    const count = Number(data.count || 0);
-                    badge.textContent = count;
-                    badge.style.display = count === 0 ? 'none' : 'inline-block';
-                })
-                .catch(() => {});
-        };
-
-        const updateTradeBadges = () => {
-            return fetch('/unread-count/trades', {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    cache: 'no-store'
-                })
-                .then(r => r.json())
-                .then(data => {
-                    const counts = data.counts || {};
-
-                    document.querySelectorAll('.item__img--container[data-trade-id]').forEach(container => {
-                        const tradeId = container.dataset.tradeId;
-                        const badge = container.querySelector('.item__badge');
+            const updateTotalBadge = () => {
+                return fetch('/unread-count', {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        cache: 'no-store'
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        const badge = document.querySelector('.count-badge');
                         if (!badge) return;
 
-                        const count = Number(counts[tradeId] || 0);
+                        const count = Number(data.count || 0);
                         badge.textContent = count;
                         badge.style.display = count === 0 ? 'none' : 'inline-block';
-                    });
-                })
-                .catch(() => {});
-        };
+                    })
+                    .catch(() => {});
+            };
 
-        const updateAll = () => {
-            updateTotalBadge();
-            updateTradeBadges();
-        };
+            const updateTradeBadges = () => {
+                return fetch('/unread-count/trades', {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        cache: 'no-store'
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        const counts = data.counts || {};
 
-        updateAll();
+                        document.querySelectorAll('.item__img--container[data-trade-id]').forEach(container => {
+                            const tradeId = container.dataset.tradeId;
+                            const badge = container.querySelector('.item__badge');
+                            if (!badge) return;
 
-        window.addEventListener('pageshow', updateAll);
-    });
-</script>
-@endsection
+                            const count = Number(counts[tradeId] || 0);
+                            badge.textContent = count;
+                            badge.style.display = count === 0 ? 'none' : 'inline-block';
+                        });
+                    })
+                    .catch(() => {});
+            };
+
+            const updateAll = () => {
+                updateTotalBadge();
+                updateTradeBadges();
+            };
+
+            updateAll();
+
+            window.addEventListener('pageshow', updateAll);
+            window.addEventListener('load', updateAll);
+        });
+    </script>
+    @endsection

@@ -25,10 +25,12 @@ class ChatController extends Controller
             ->withMax('messages', 'created_at')
             ->firstOrFail();
 
-        Message::where('trade_id', $trade->id)
-            ->where('user_id', $trade->buyer_profile_id)
-            ->where('read_by_seller', false) 
-            ->update(['read_by_seller' => true]);
+        Message::join('profiles', 'profiles.user_id', '=', 'trade_messages.user_id')
+            ->where('trade_messages.trade_id', $trade->id)
+            ->where('profiles.id', $trade->buyer_profile_id)
+            ->where('trade_messages.read_by_seller', false)
+            ->update(['trade_messages.read_by_seller' => true]);
+
 
         $sidebarTrades = Trade::whereIn('status', ['active', 'completed'])
             ->where('seller_profile_id', $profile->id)
@@ -79,6 +81,13 @@ class ChatController extends Controller
             ->with(['sell.user', 'messages.user'])
             ->firstOrFail();
 
+        Message::join('profiles', 'profiles.user_id', '=', 'trade_messages.user_id')
+            ->where('trade_messages.trade_id', $trade->id)
+            ->where('profiles.id', $trade->seller_profile_id)
+            ->where('trade_messages.read_by_buyer', false)
+            ->update(['trade_messages.read_by_buyer' => true]);
+
+
         $sell = Sell::with('user')->findOrFail($trade->sell_id);
 
         return view('buyer', compact('trade', 'profile', 'sell'));
@@ -96,6 +105,7 @@ class ChatController extends Controller
         $message = new Message();
         $message->trade_id = $trade->id;
         $message->user_id = Auth::id();
+
         $message->body = $request->input('body');
 
         if ($request->hasFile('image')) {
