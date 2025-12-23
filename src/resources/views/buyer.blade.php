@@ -74,11 +74,11 @@
 
         <div class="message {{ $isMe ? 'message--me' : 'message--other' }}">
             <div class="message__meta">
+                <strong class="message__name">{{ $message->user->profile->name }}</strong>
                 <div class="profile-image">
                     <img src="{{ optional($message->user->profile)->image ? asset('storage/' . optional($message->user->profile)->image) : asset('images/cat_default_avatar.png') }}"
                         alt="{{ optional($message->user->profile)->name }}">
                 </div>
-                <strong class="message__name">{{ $message->user->profile->name }}</strong>
             </div>
 
             <div class="message__content">
@@ -90,11 +90,6 @@
 
                 @if($isMe)
                 <div class="message__actions">
-                    <form action="{{ route('chat.destroy', $message->id) }}" method="POST" class="delete-form">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-delete btn-sm">削除</button>
-                    </form>
                     <button type="button" class="btn edit-toggle">編集</button>
                     <form action="{{ route('chat.update', $message->id) }}" method="POST" class="edit-form" style="display:none;">
                         @csrf
@@ -105,6 +100,11 @@
                             <button type="button" class="btn cancel-edit">キャンセル</button>
                         </div>
                     </form>
+                    <form action="{{ route('chat.destroy', $message->id) }}" method="POST" class="delete-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-delete btn-sm">削除</button>
+                    </form>
                 </div>
                 @endif
             </div>
@@ -114,15 +114,18 @@
         <form action="{{ url('/chat/buyer/' . $trade->id) }}" method="POST" enctype="multipart/form-data" class="message-form" novalidate>
             @csrf
             <div class="message-input">
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                <div class="error-space">
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                 </div>
-                @endif
+
                 <textarea id="chat-body" name="body" rows="3" data-trade-id="{{ $trade->id }}" data-user-id="{{ auth()->id() }}" class="form-control" placeholder="取引メッセージを入力してください">{{ old('body','') }}</textarea>
             </div>
 
@@ -144,7 +147,7 @@
 
             <div class="trade-sidebar__list">
                 @foreach($sidebarTrades as $trades)
-                    <a href="{{ $profile->id === $trades->seller_profile_id
+                <a href="{{ $profile->id === $trades->seller_profile_id
                     ? route('get.seller', $trades->id)
                     : route('get.buyer', $trades->id) }}"
                     class="trade-sidebar__item {{ $trades->id === $trade->id ? 'is-active' : '' }}">
