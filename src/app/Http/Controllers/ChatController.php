@@ -33,7 +33,10 @@ class ChatController extends Controller
 
 
         $sidebarTrades = Trade::whereIn('status', ['active', 'completed'])
-            ->where('seller_profile_id', $profile->id)
+            ->where(function ($query) use ($profile) {
+                $query->where('buyer_profile_id', $profile->id)
+                    ->orWhere('seller_profile_id', $profile->id);
+            })
             ->with('sell')
             ->get();
 
@@ -88,7 +91,10 @@ class ChatController extends Controller
             ->update(['trade_messages.read_by_buyer' => true]);
 
         $sidebarTrades = Trade::whereIn('status', ['active', 'completed'])
-            ->where('buyer_profile_id', $profile->id)
+            ->where(function ($query) use ($profile) {
+                $query->where('buyer_profile_id', $profile->id)
+                    ->orWhere('seller_profile_id', $profile->id);
+            })
             ->with('sell')
             ->get();
 

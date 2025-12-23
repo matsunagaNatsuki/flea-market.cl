@@ -124,8 +124,6 @@
             <input type="file" id="image" name="image" style="display:none;">
             <label for="image" class="image-btn">画像を追加</label>
 
-
-
             <button type="submit" class="btn btn-primary mt-2">
                 <img src="http://localhost/images/paper-airplane.png" alt="送信" width="35" height="35">
             </button>
@@ -138,7 +136,10 @@
         <aside class="trade-sidebar">
             <h3 class="trade-sidebar__title">その他の取引
                 @foreach($sidebarTrades as $trades)
-                <a href="{{ route('get.seller', $trades->id) }}" class="trade-sidebar__item {{ $trades->id === $trade->id ? 'is-active' : '' }}">
+                    <a href="{{ $profile->id === $trades->buyer_profile_id
+                    ? route('get.buyer', $trades->id)
+                    : route('get.seller', $trades->id) }}"
+                    class="trade-sidebar__item {{ $trades->id === $trade->id ? 'is-active' : '' }}">
 
                     <div class="trade-sidebar__info">
                         <p class="trade-sidebar__name">{{ $trades->sell->name }}</p>
@@ -177,6 +178,4 @@
             });
         });
     </script>
-
-
-    @endsection
+@endsection

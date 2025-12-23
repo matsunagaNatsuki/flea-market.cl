@@ -8,7 +8,6 @@
 
 @section('content')
 <div class="container">
-
     <!-- 取引開始ボタンを押下するとメールが送信され評価モーダルが表示されます -->
     <dialog id="reviewModal" class="review-modal">
         <form method="POST" action="{{ route('buyer.review', $trade->id) }}" class="review-modal__inner">
@@ -91,6 +90,11 @@
 
                 @if($isMe)
                 <div class="message__actions">
+                    <form action="{{ route('chat.destroy', $message->id) }}" method="POST" class="delete-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-delete btn-sm">削除</button>
+                    </form>
                     <button type="button" class="btn edit-toggle">編集</button>
                     <form action="{{ route('chat.update', $message->id) }}" method="POST" class="edit-form" style="display:none;">
                         @csrf
@@ -101,32 +105,6 @@
                             <button type="button" class="btn cancel-edit">キャンセル</button>
                         </div>
                     </form>
-                    <form action="{{ route('chat.destroy', $message->id) }}" method="POST" class="delete-form">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-delete btn-sm">削除</button>
-                    </form>
-
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            document.querySelectorAll('.edit-toggle').forEach(function(button) {
-                                button.addEventListener('click', function() {
-                                    const form = this.parentElement.querySelector('.edit-form');
-                                    form.style.display = 'block';
-                                    this.style.display = 'none';
-                                });
-                            });
-
-                            document.querySelectorAll('.cancel-edit').forEach(function(button) {
-                                button.addEventListener('click', function() {
-                                    const form = this.closest('.edit-form');
-                                    const editButton = form.parentElement.querySelector('.edit-toggle');
-                                    form.style.display = 'none';
-                                    editButton.style.display = 'inline-block';
-                                });
-                            });
-                        });
-                    </script>
                 </div>
                 @endif
             </div>
@@ -155,7 +133,6 @@
             <button type="submit" class="btn btn-primary mt-2">
                 <img src="http://localhost/images/paper-airplane.png" alt="送信" width="35" height="35">
             </button>
-
         </form>
         <script src="{{ asset('js/chat.js') }}"></script>
     </div>
@@ -165,7 +142,11 @@
         <aside class="trade-sidebar">
             <h3 class="trade-sidebar__title">その他の取引
                 @foreach($sidebarTrades as $trades)
-                <a href="{{ route('get.buyer', $trades->id) }}" class="trade-sidebar__item {{ $trades->id === $trade->id ? 'is-active' : '' }}">
+                    <a href="{{ $profile->id === $trades->seller_profile_id
+                        ? route('get.seller', $trades->id)
+                        : route('get.buyer', $trades->id) }}"
+                        class="trade-sidebar__item {{ $trades->id === $trade->id ? 'is-active' : '' }}">
+
 
                     <div class="trade-sidebar__info">
                         <p class="trade-sidebar__name">{{ $trades->sell->name }}</p>
@@ -185,5 +166,23 @@
     </script>
     @endif
 
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.edit-toggle').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const form = this.parentElement.querySelector('.edit-form');
+                    form.style.display = 'block';
+                    this.style.display = 'none';
+                });
+            });
+            document.querySelectorAll('.cancel-edit').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const form = this.closest('.edit-form');
+                    const editButton = form.parentElement.querySelector('.edit-toggle');
+                    form.style.display = 'none';
+                    editButton.style.display = 'inline-block';
+                });
+            });
+        });
+    </script>
     @endsection
