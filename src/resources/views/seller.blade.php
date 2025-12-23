@@ -23,7 +23,8 @@
                     <input type="hidden" name="score" id="sellerReviewScore" value="{{ old('score', '') }}">
 
                     @for($i=1; $i<=5; $i++)
-                        <button type="button" class="review-star" data-value="{{ $i }}" aria-label="{{ $i }}点" aria-pressed="false">★</button>
+                        <button type="button" class="review-star"
+                        data-value="{{ $i }}" aria-label="{{ $i }}点" aria-pressed="false">★</button>
                         @endfor
                 </div>
             </div>
@@ -77,10 +78,7 @@
             </div>
 
             <div class="message__content">
-                <p class="message__bubble {{ mb_strlen($message->body) <= 4 ? 'short-message' : '' }}">
-                    {{ $message->body }}
-                </p>
-
+                <p class="message__bubble">{{ $message->body }}</p>
 
                 @if($message->image)
                 <img class="message__img" src="{{ asset('storage/' . $message->image) }}" alt="添付画像">

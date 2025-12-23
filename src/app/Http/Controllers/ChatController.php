@@ -87,10 +87,14 @@ class ChatController extends Controller
             ->where('trade_messages.read_by_buyer', false)
             ->update(['trade_messages.read_by_buyer' => true]);
 
+        $sidebarTrades = Trade::whereIn('status', ['active', 'completed'])
+            ->where('buyer_profile_id', $profile->id)
+            ->with('sell')
+            ->get();
 
         $sell = Sell::with('user')->findOrFail($trade->sell_id);
 
-        return view('buyer', compact('trade', 'profile', 'sell'));
+        return view('buyer', compact('trade', 'profile', 'sell', 'sidebarTrades'));
     }
 
     public function postBuyer(ChatRequest $request, $tradeId)
