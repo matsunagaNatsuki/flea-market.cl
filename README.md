@@ -18,6 +18,14 @@ mysql:
 **Laravel環境構築**
 1. `docker-compose exec php bash`
 2. `composer install`
+
+> GitHubのZIPダウンロードがタイムアウトして`git was not found in your PATH, skipping source download`というメッセージが表示され、composer installができない場合があります。
+エラーが発生する際は以下コマンドをDockerコンテナ内に入力し、再度`composer install`を行ってください。
+```bash
+  apt update
+  apt install -y git
+```
+
 3. 「.env.example」ファイルを「.env」ファイルに命名を変更。または、新しく.envファイルを作成
 4. .envに以下の環境変数を追加
 ```text
