@@ -237,6 +237,7 @@ label.image-btn {
     border-radius: 4px;
     cursor: pointer;
     font-weight: 700;
+    background: #FFF;
 }
 
 /* 送信ボタン */
