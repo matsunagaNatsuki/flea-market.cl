@@ -133,8 +133,10 @@
 
     <!-- サイドバー -->
     <div class="trade-sidebar">
-        <aside class="trade-sidebar">
-            <h3 class="trade-sidebar__title">その他の取引
+        <aside class="trade-sidebar__inner">
+            <h3 class="trade-sidebar__title">その他の取引</h3>
+
+            <div class="trade-sidebar__list">
                 @foreach($sidebarTrades as $trades)
                     <a href="{{ $profile->id === $trades->buyer_profile_id
                     ? route('get.buyer', $trades->id)
@@ -178,4 +180,4 @@
             });
         });
     </script>
-@endsection
+    @endsection

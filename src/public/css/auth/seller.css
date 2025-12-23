@@ -275,10 +275,24 @@ label.image-btn {
     top: 77px;
     left: 0;
     width: 280px;
-    height: 100vh;
+    height: calc(100vh - 77px);
     background: #8e8e8e;
     padding: 18px 14px;
     z-index: 20;
+}
+
+.trade-sidebar__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.trade-sidebar__list {
+    margin-top: 10px;
+    overflow-y: auto;
+    max-height: 100%;
+    padding-right: 6px;
 }
 
 .trade-sidebar__title {
